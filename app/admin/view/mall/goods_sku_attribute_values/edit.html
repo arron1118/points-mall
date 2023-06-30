@@ -1,0 +1,44 @@
+<div class="layuimini-container">
+    <form id="app-form" class="layui-form layuimini-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label">属性类型</label>
+            <div class="layui-input-block">
+                <select name="sku_attribute_id" lay-verify="required">
+                    {foreach $pidMenuList as $vo}
+                        <option value="{$vo.id}" {if $vo['id'] == $row['sku_attribute_id']}selected{/if}>{$vo.sku_attribute_name|raw}</option>
+                    {/foreach}
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label required">属性值</label>
+            <div class="layui-input-block">
+                <input type="text" name="sku_attribute_value" class="layui-input" lay-verify="required" lay-reqtext="请输入属性值" placeholder="请输入属性值" value="{$row.sku_attribute_value|default=''}">
+                <tip>填写属性值。</tip>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">附属值</label>
+            <div class="layui-input-block">
+                <input type="text" name="sub_sku_attribute_value" class="layui-input" lay-reqtext="请输入附属值" placeholder="请输入附属值" value="{$row.sub_sku_attribute_value|default=''}">
+                <tip>填写附属值。</tip>
+            </div>
+        </div>
+
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">备注信息</label>
+            <div class="layui-input-block">
+                <textarea name="remark" class="layui-textarea" placeholder="请输入备注信息">{$row.remark|default=''}</textarea>
+            </div>
+        </div>
+
+        <div class="hr-line"></div>
+        <div class="layui-form-item text-center">
+            <button type="submit" class="layui-btn layui-btn-normal layui-btn-sm" lay-submit>确认</button>
+            <button type="reset" class="layui-btn layui-btn-primary layui-btn-sm">重置</button>
+        </div>
+
+    </form>
+</div>
