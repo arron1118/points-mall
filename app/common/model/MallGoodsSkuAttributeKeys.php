@@ -20,6 +20,11 @@ class MallGoodsSkuAttributeKeys extends TimeModel
         return $this->hasMany(MallGoodsSkuAttributeValues::class, 'sku_attribute_id', 'id');
     }
 
+    public function company_attributes()
+    {
+        return $this->hasMany(MallGoodsCompanyAttributes::class, 'sku_attribute_key_id', 'id');
+    }
+
     public function getAttributeKeysList()
     {
         return $this->order('sort desc')->select()->toArray();

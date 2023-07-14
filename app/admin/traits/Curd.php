@@ -5,7 +5,7 @@
 // +----------------------------------------------------------------------
 // | PHP交流群: 763822524
 // +----------------------------------------------------------------------
-// | 开源协议  https://mit-license.org 
+// | 开源协议  https://mit-license.org
 // +----------------------------------------------------------------------
 // | github开源项目：https://github.com/zhongshaofa/EasyAdmin
 // +----------------------------------------------------------------------
@@ -35,7 +35,7 @@ trait Curd
             if (input('selectFields')) {
                 return $this->selectList();
             }
-            list($page, $limit, $where) = $this->buildTableParames();
+            [$page, $limit, $where] = $this->buildTableParames();
             $count = $this->model
                 ->where($where)
                 ->count();

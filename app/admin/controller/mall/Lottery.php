@@ -9,7 +9,13 @@ namespace app\admin\controller\mall;
 
 use app\admin\traits\Curd;
 use app\common\model\MallLottery;
+use EasyAdmin\annotation\ControllerAnnotation;
 
+/**
+ * Lottery
+ * @package app\admin\controller\mall
+ * @ControllerAnnotation(title="幸运抽奖管理")
+ */
 class Lottery extends \app\common\controller\AdminController
 {
 

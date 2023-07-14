@@ -10,4 +10,14 @@ namespace app\common\model;
 class MallGoodsEvaluateMessages extends TimeModel
 {
 
+    public function users()
+    {
+        return $this->belongsTo(MemberUsers::class, 'user_id', 'id');
+    }
+
+    public function evaluates()
+    {
+        return $this->belongsTo(MallGoodsEvaluates::class, 'evaluate_id', 'id');
+    }
+
 }

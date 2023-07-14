@@ -22,7 +22,7 @@ define(["jquery", "easy-admin"], function ($, ea) {
                     {field: 'sku_attribute_name', minWidth: 80, title: '名称'},
                     {field: 'category.category_name', minWidth: 80, title: '商品分类', search: false,},
                     {field: 'sort', width: 80, title: '排序', edit: 'text', search: false,},
-                    {field: 'create_time', minWidth: 80, title: '创建时间', search: 'range', search: false,},
+                    {field: 'create_time', minWidth: 80, title: '创建时间', search: false,},
                     {
                         width: 250,
                         title: '操作',

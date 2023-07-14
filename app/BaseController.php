@@ -3,6 +3,7 @@ declare (strict_types = 1);
 
 namespace app;
 
+use Jenssegers\Agent\Agent;
 use think\App;
 use think\exception\ValidateException;
 use think\Validate;
@@ -37,6 +38,18 @@ abstract class BaseController
     protected $middleware = [];
 
     /**
+     * 客户端设备信息
+     * @var Agent
+     */
+    protected $agent;
+
+    /**
+     * Token 过期时间
+     * @var float|int
+     */
+    protected $token_expire_time = 3600 * 24 * 7;
+
+    /**
      * 构造方法
      * @access public
      * @param  App  $app  应用对象
@@ -45,6 +58,7 @@ abstract class BaseController
     {
         $this->app     = $app;
         $this->request = $this->app->request;
+        $this->agent = new Agent();
 
         // 控制器初始化
         $this->initialize();

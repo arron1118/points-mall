@@ -10,4 +10,14 @@ namespace app\common\model;
 class MemberLotteryLogs extends TimeModel
 {
 
+    public function users()
+    {
+        return $this->belongsTo(MemberUsers::class, 'user_id', 'id');
+    }
+
+    public function lottery()
+    {
+        return $this->belongsTo(MallLottery::class, 'lottery_id', 'id');
+    }
+
 }

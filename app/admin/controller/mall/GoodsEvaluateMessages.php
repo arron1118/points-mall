@@ -9,7 +9,13 @@ namespace app\admin\controller\mall;
 
 use app\admin\traits\Curd;
 use app\common\model\MallGoodsEvaluateMessages;
+use EasyAdmin\annotation\ControllerAnnotation;
 
+/**
+ * GoodsEvaluateMessages
+ * @package app\admin\controller\mall
+ * @ControllerAnnotation(title="商品评价留言管理")
+ */
 class GoodsEvaluateMessages extends \app\common\controller\AdminController
 {
 

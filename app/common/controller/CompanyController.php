@@ -1,15 +1,5 @@
 <?php
 
-// +----------------------------------------------------------------------
-// | EasyAdmin
-// +----------------------------------------------------------------------
-// | PHP交流群: 763822524
-// +----------------------------------------------------------------------
-// | 开源协议  https://mit-license.org
-// +----------------------------------------------------------------------
-// | github开源项目：https://github.com/zhongshaofa/EasyAdmin
-// +----------------------------------------------------------------------
-
 
 namespace app\common\controller;
 
@@ -17,14 +7,16 @@ namespace app\common\controller;
 use app\admin\service\ConfigService;
 use app\BaseController;
 use app\common\constants\AdminConstant;
+use app\common\model\CompanyUsers;
 use app\common\service\AuthService;
 use EasyAdmin\tool\CommonTool;
+use think\facade\Cookie;
 use think\facade\Env;
 use think\facade\View;
 use think\Model;
 
 /**
- * Class AdminController
+ * Class CompanyController
  * @package app\common\controller
  */
 class CompanyController extends BaseController
@@ -91,6 +83,12 @@ class CompanyController extends BaseController
     protected $isDemo = false;
 
     /**
+     * 用户信息
+     * @var CompanyUsers
+     */
+    protected $userInfo;
+
+    /**
      * 解析和获取模板内容 用于输出
      * @param string $template
      * @param array $vars
@@ -151,15 +149,17 @@ class CompanyController extends BaseController
     private function viewInit()
     {
         $request = app()->request;
-        list($thisModule, $thisController, $thisAction) = [app('http')->getName(), app()->request->controller(), $request->action()];
-        list($thisControllerArr, $jsPath) = [explode('.', $thisController), null];
+        $thisModule = app('http')->getName();
+        $thisController = app()->request->controller();
+        $thisAction = $request->action();
+        $thisControllerArr = explode('.', $thisController);
+        $jsPath = null;
         foreach ($thisControllerArr as $vo) {
             empty($jsPath) ? $jsPath = parse_name($vo) : $jsPath .= '/' . parse_name($vo);
         }
-        $autoloadJs = file_exists(root_path('public') . "static/{$thisModule}/js/{$jsPath}.js") ? true : false;
+        $autoloadJs = file_exists(root_path('public') . "static/{$thisModule}/js/{$jsPath}.js");
         $thisControllerJsPath = "{$thisModule}/js/{$jsPath}.js";
-        $adminModuleName = config('app.admin_alias_name');
-        $isSuperAdmin = session('admin.id') == AdminConstant::SUPER_ADMIN_ID ? true : false;
+        $adminModuleName = 'company';
         $data = [
             'adminModuleName' => $adminModuleName,
             'thisController' => parse_name($thisController),
@@ -167,8 +167,9 @@ class CompanyController extends BaseController
             'thisRequest' => parse_name("{$thisModule}/{$thisController}/{$thisAction}"),
             'thisControllerJsPath' => "{$thisControllerJsPath}",
             'autoloadJs' => $autoloadJs,
-            'isSuperAdmin' => $isSuperAdmin,
+            'isSuperAdmin' => true,
             'version' => env('app_debug') ? time() : ConfigService::getVersion(),
+            'userInfo' => $this->userInfo,
         ];
 
         View::assign($data);
@@ -193,37 +194,20 @@ class CompanyController extends BaseController
      */
     private function checkAuth()
     {
-        $adminConfig = config('admin');
-        $adminId = session('admin.id');
-        $expireTime = session('admin.expire_time');
-        /** @var AuthService $authService */
-        $authService = app(AuthService::class, ['adminId' => $adminId]);
-        $currentNode = $authService->getCurrentNode();
+        $adminConfig = config('company');
         $currentController = parse_name(app()->request->controller());
+        $userToken = Cookie::get('points_mall_company_token');
+        $userToken && $this->userInfo = CompanyUsers::where('token', $userToken)->findOrEmpty();
 
         // 验证登录
-        if (!in_array($currentController, $adminConfig['no_login_controller']) &&
-            !in_array($currentNode, $adminConfig['no_login_node'])) {
-            empty($adminId) && $this->error('请先登录后台', [], __url('admin/login/index'));
+        if (!in_array($currentController, $adminConfig['no_login_controller'])) {
+            empty($this->userInfo) && $this->error('请先登录后台', [], __url('company/login/index'));
 
             // 判断是否登录过期
-            if ($expireTime !== true && time() > $expireTime) {
-                session('admin', null);
-                $this->error('登录已过期，请重新登录', [], __url('admin/login/index'));
+            if (time() > $this->userInfo->token_expire_time) {
+                Cookie::delete('points_mall_company_token');
+                $this->error('登录已过期，请重新登录', [], __url('company/login/index'));
             }
-        }
-
-        // 验证权限
-        if (!in_array($currentController, $adminConfig['no_auth_controller']) &&
-            !in_array($currentNode, $adminConfig['no_auth_node'])) {
-            $check = $authService->checkNode($currentNode);
-            !$check && $this->error('无权限访问');
-
-            // 判断是否为演示环境
-            if (env('easyadmin.is_demo', false) && app()->request->isPost()) {
-                $this->error('演示环境下不允许修改');
-            }
-
         }
     }
 
@@ -242,7 +226,9 @@ class CompanyController extends BaseController
         // json转数组
         $filters = json_decode($filters, true);
         $ops = json_decode($ops, true);
-        $where = [];
+        $where = [
+            ['company_id', '=', $this->userInfo->id],
+        ];
         $excludes = [];
 
         // 判断是否关联查询

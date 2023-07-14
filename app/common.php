@@ -122,3 +122,78 @@ if (!function_exists('auth')) {
     }
 
 }
+
+if (!function_exists('specArrCombination')) {
+    /*
+     * 二维数组的递归排列组合
+     * 格式： $spec_arr = [[...],[...],[...],...]
+     * 样例：  $spec = [
+                ['x','xl','xxl'],
+                ['红色','黑色','灰色','紫色'],
+                ['男款','女款'],
+            ];
+     */
+    function specArrCombination($arr, $i = 0, $tmp = [])
+    {
+        $g_a = [];
+        if (count($arr) - 1 <= $i) {
+            $ar = [];
+            foreach ($arr[$i] as $key => $val) {
+                $tmp_skuarr = [];
+                if ($i == 0) {
+                    $tmp_skuarr[] = $val;
+                    $ar[] = $tmp_skuarr;
+                } else {
+                    $tmp_skuarr = $tmp;
+                    $tmp_skuarr[] = $val;
+                    $ar[] = $tmp_skuarr;
+                }
+            }
+            return $ar;
+        } else {
+            foreach ($arr[$i] as $key => $val) {
+                $tmp_skuarr = [];
+
+                if (count($tmp) <= 0) {
+                    $tmp_skuarr[] = $val;
+                } else {
+                    $tmp_skuarr = $tmp;
+                    $tmp_skuarr[] = $val;
+                }
+
+                $tmpNode = $tmp_skuarr;
+                $g_a = array_merge($g_a, specArrCombination($arr, $i + 1, $tmpNode));
+            }
+
+        }
+
+        return $g_a;
+
+    }
+}
+
+if (!function_exists('createOrderNo')) {
+    /**
+     * 生成订单号
+     * @return string 返回24位订单号
+     */
+    function createOrderNo()
+    {
+        $t = explode(' ', microtime());
+        $m = explode('.', $t[0]);
+        return date('Ymd') . $t[1] . substr($m[1], 0, 6);
+    }
+}
+
+if (!function_exists('createToken')) {
+    /**
+     * 使用密码伊娃Token
+     * @param $password
+     * @return false|string|null
+     */
+    function createToken($password)
+    {
+        return password_hash($password, PASSWORD_BCRYPT);
+    }
+}
+

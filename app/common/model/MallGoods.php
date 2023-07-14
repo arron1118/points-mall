@@ -14,9 +14,14 @@ class MallGoods extends TimeModel
 
     protected $jsonAssoc = true;
 
-    public function getSkuAttributes()
+    public function getStatusTextAttr($value, $data)
     {
-        return $this->skuAttributes;
+        return $this->getStatusList()[$data['status']];
+    }
+
+    public function getStatusList()
+    {
+        return ['下架', '上架'];
     }
 
     public function category()
@@ -34,8 +39,14 @@ class MallGoods extends TimeModel
         return $this->belongsTo(MallBrands::class, 'brand_id', 'id');
     }
 
-    public static function onAfterWrite($goods)
+    public function companyAttributes()
     {
+        return $this->hasMany(MallGoodsCompanyAttributes::class, 'goods_id', 'id');
+    }
+
+    public function goodsSpecs()
+    {
+        return $this->hasMany(MallGoodsSpecs::class, 'goods_id', 'id');
     }
 
 }

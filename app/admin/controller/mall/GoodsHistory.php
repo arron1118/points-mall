@@ -9,7 +9,13 @@ namespace app\admin\controller\mall;
 
 use app\admin\traits\Curd;
 use app\common\model\MallGoodsHistory;
+use EasyAdmin\annotation\ControllerAnnotation;
 
+/**
+ * GoodsHistory
+ * @package app\admin\controller\mall
+ * @ControllerAnnotation(title="商品浏览记录")
+ */
 class GoodsHistory extends \app\common\controller\AdminController
 {
 

@@ -3795,16 +3795,16 @@
         },
         {
             "name": "yansongda/pay",
-            "version": "v3.4.1",
+            "version": "v3.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yansongda/pay.git",
-                "reference": "da90865a0e421fa8c3a65334249e97f0259ff2ce"
+                "reference": "457690529c5dd1faac4ee313eb4cff8f4d3a1ef5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yansongda/pay/zipball/da90865a0e421fa8c3a65334249e97f0259ff2ce",
-                "reference": "da90865a0e421fa8c3a65334249e97f0259ff2ce",
+                "url": "https://api.github.com/repos/yansongda/pay/zipball/457690529c5dd1faac4ee313eb4cff8f4d3a1ef5",
+                "reference": "457690529c5dd1faac4ee313eb4cff8f4d3a1ef5",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -3826,6 +3826,9 @@
                 "psr/http-message": "^1.1 || ^2.0",
                 "psr/log": "^1.1 || ^2.0 || ^3.0",
                 "yansongda/supports": "~4.0.0"
+            },
+            "conflict": {
+                "hyperf/framework": "<3.0"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^3.0",
@@ -3875,7 +3878,7 @@
                 "issues": "https://github.com/yansongda/pay/issues",
                 "source": "https://github.com/yansongda/pay"
             },
-            "time": "2023-06-24T12:04:08+00:00"
+            "time": "2023-07-09T11:27:30+00:00"
         },
         {
             "name": "yansongda/supports",

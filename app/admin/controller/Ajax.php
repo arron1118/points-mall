@@ -5,7 +5,7 @@
 // +----------------------------------------------------------------------
 // | PHP交流群: 763822524
 // +----------------------------------------------------------------------
-// | 开源协议  https://mit-license.org 
+// | 开源协议  https://mit-license.org
 // +----------------------------------------------------------------------
 // | github开源项目：https://github.com/zhongshaofa/EasyAdmin
 // +----------------------------------------------------------------------
@@ -15,6 +15,7 @@ namespace app\admin\controller;
 use app\admin\model\SystemUploadfile;
 use app\common\controller\AdminController;
 use app\common\service\MenuService;
+use app\common\service\UploadfileService;
 use EasyAdmin\upload\Uploadfile;
 use think\db\Query;
 use think\facade\Cache;
@@ -76,15 +77,15 @@ class Ajax extends AdminController
         ];
         $this->validate($data, $rule);
         try {
-            $upload = Uploadfile::instance()
+            $upload = (new UploadfileService($data['file']))
                 ->setUploadType($data['upload_type'])
                 ->setUploadConfig($uploadConfig)
-                ->setFile($data['file'])
-                ->save();
+                ->upload();
         } catch (\Exception $e) {
             $this->error($e->getMessage());
         }
-        if ($upload['save'] == true) {
+
+        if ($upload['save']) {
             $this->success($upload['msg'], ['url' => $upload['url']]);
         } else {
             $this->error($upload['msg']);
@@ -110,15 +111,14 @@ class Ajax extends AdminController
         ];
         $this->validate($data, $rule);
         try {
-            $upload = Uploadfile::instance()
+            $upload = (new UploadfileService($data['file']))
                 ->setUploadType($data['upload_type'])
                 ->setUploadConfig($uploadConfig)
-                ->setFile($data['file'])
-                ->save();
+                ->upload();
         } catch (\Exception $e) {
             $this->error($e->getMessage());
         }
-        if ($upload['save'] == true) {
+        if ($upload['save']) {
             return json([
                 'error'    => [
                     'message' => '上传成功',

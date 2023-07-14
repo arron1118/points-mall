@@ -74,7 +74,7 @@ class Menu extends AdminController
                 'pid' => MenuConstant::HOME_PID,
             ])
             ->value('id');
-        if ($id === $homeId) {
+        if ((int) $id === (int) $homeId) {
             $this->error('首页不能添加子菜单');
         }
         if ($this->request->isPost()) {

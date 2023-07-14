@@ -10,4 +10,9 @@ namespace app\common\model;
 class MallOrderPayment extends TimeModel
 {
 
+    public function users()
+    {
+        return $this->belongsTo(MemberUsers::class, 'user_id', 'id');
+    }
+
 }

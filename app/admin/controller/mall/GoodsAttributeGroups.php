@@ -9,7 +9,13 @@ namespace app\admin\controller\mall;
 
 use app\admin\traits\Curd;
 use app\common\model\MallGoodsAttributeGroups;
+use EasyAdmin\annotation\ControllerAnnotation;
 
+/**
+ * GoodsAttributeGroups
+ * @package app\admin\controller\mall
+ * @ControllerAnnotation(title="商品属性组管理")
+ */
 class GoodsAttributeGroups extends \app\common\controller\AdminController
 {
 

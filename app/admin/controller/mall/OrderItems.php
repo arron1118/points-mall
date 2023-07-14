@@ -9,7 +9,13 @@ namespace app\admin\controller\mall;
 
 use app\admin\traits\Curd;
 use app\common\model\MallOrderItems;
+use EasyAdmin\annotation\ControllerAnnotation;
 
+/**
+ * OrderItems
+ * @package app\admin\controller\mall
+ * @ControllerAnnotation(title="订单详细管理")
+ */
 class OrderItems extends \app\common\controller\AdminController
 {
 

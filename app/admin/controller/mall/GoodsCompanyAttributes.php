@@ -9,7 +9,13 @@ namespace app\admin\controller\mall;
 
 use app\admin\traits\Curd;
 use app\common\model\MallGoodsCompanyAttributes;
+use EasyAdmin\annotation\ControllerAnnotation;
 
+/**
+ * GoodsCompanyAttributes
+ * @package app\admin\controller\mall
+ * @ControllerAnnotation(title="商家商品属性管理")
+ */
 class GoodsCompanyAttributes extends \app\common\controller\AdminController
 {
 

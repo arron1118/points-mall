@@ -9,7 +9,13 @@ namespace app\admin\controller\mall;
 
 use app\admin\traits\Curd;
 use app\common\model\MallGoodsSpecs;
+use EasyAdmin\annotation\ControllerAnnotation;
 
+/**
+ * GoodsSpecs
+ * @package app\admin\controller\mall
+ * @ControllerAnnotation(title="商品SKU管理")
+ */
 class GoodsSpecs extends \app\common\controller\AdminController
 {
 

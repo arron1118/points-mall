@@ -10,4 +10,9 @@ namespace app\common\model;
 class CompanySigninLogs extends TimeModel
 {
 
+    public function company()
+    {
+        return $this->belongsTo(CompanyUsers::class, 'company_id', 'id');
+    }
+
 }

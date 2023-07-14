@@ -74,44 +74,33 @@ class Goods extends AdminController
             $rule = [];
             $this->validate($post, $rule);
             try {
-//                $save = $this->model->save($post);
-                $save = false;
+                $post['company_id'] = session('admin.id');
+                $save = $this->model->save($post);
 
-                if ($save) {
-
-                    $attributes = $specs = [];
-                    $goodsCompanyAttributeModel = MallGoodsCompanyAttributes::class;
-                    $goodsSpecsModel = MallGoodsSpecs::class;
-                    $goodsCompanyAttributeData = $goodsSpecsData = [];
+                if ($save && isset($post['attribute_list'])) {
+                    $goodsCompanyAttributeModel = new MallGoodsCompanyAttributes();
+                    $goodsSpecsModel = new MallGoodsSpecs();
+                    $goodsCompanyAttributeData = [];
 
                     // 更新商家商品属性
                     foreach ($post['goods_attribute_list'] as $key => $value) {
-                        $value['value_id'] = array_values($value['value_id']);
-                        foreach ($value['value_id'] as $k => $v) {
+                        foreach ($value as $k => $v) {
                             $goodsCompanyAttributeData[] = [
-                                'company_id' => session('admin.id'),
+                                'company_id' => $post['company_id'],
                                 'goods_id' => $this->model->id,
                                 'sku_attribute_key_id' => $key,
-                                'sku_attribute_value_id' => $v,
-                                'sku_attribute_value' => $value['value_name'][$k],
+                                'sku_attribute_value_id' => $k,
+                                'sku_attribute_value' => $v['sku_attribute_value'],
                             ];
                         }
                     }
-                    $goodsCompanyAttributeModel::saveAll($goodsCompanyAttributeData);
+                    $goodsCompanyAttributeModel->saveAll($goodsCompanyAttributeData);
 
                     // 更新sku表
-                    foreach ($post['attribute_list'] as $k => $v) {
-                        foreach ($post['specs_list']['stocks'] as $key => $val) {
-                            $goodsSpecsData[] = [
-                                'goods_id' => $this->model->id,
-                                'market_price' => $post['specs_list']['market_prices'][$key],
-                                'discount_price' => $post['specs_list']['discount_prices'][$key],
-                                'integral' => $post['specs_list']['integrals'][$key],
-                                'stock' => $val,
-                                'specs_list'
-                            ];
-                        }
+                    foreach ($post['specs_list'] as $key => &$val) {
+                        $val['goods_id'] = $this->model->id;
                     }
+                    $goodsSpecsModel->saveAll($post['specs_list']);
                 }
 
             } catch (\Exception $e) {
@@ -129,20 +118,76 @@ class Goods extends AdminController
      */
     public function edit($id)
     {
-        $row = $this->model->find($id);
+        $row = $this->model->with([
+            'companyAttributes' => function ($query) {
+                return $query->field('id, goods_id, sku_attribute_key_id, sku_attribute_value_id, sku_attribute_value');
+            },
+            'goodsSpecs' => function ($query) {
+                return $query->field('id, goods_id, specs_list, market_price, discount_price, integral, stock');
+            }
+        ])->find($id);
+
         empty($row) && $this->error('数据不存在');
         if ($this->request->isPost()) {
             $post = $this->request->post();
             $rule = [];
             $this->validate($post, $rule);
+            $return = [];
             try {
                 $save = $row->save($post);
+
+                if ($save) {
+                    $row = $row->toArray();
+
+                    $goodsCompanyAttributeModel = new MallGoodsCompanyAttributes();
+                    $goodsSpecsModel = new MallGoodsSpecs();
+                    $goodsCompanyAttributeData = [];
+
+                    if (isset($post['attribute_list'])) {
+                        // 更新商家商品属性
+                        foreach ($post['goods_attribute_list'] as $key => $value) {
+                            $attr = array_diff(array_column($row['companyAttributes'], 'id'), array_column($value, 'id'));
+                            $return['attr'] = $attr;
+                            $attr && MallGoodsCompanyAttributes::destroy(array_values($attr), true);
+                            foreach ($value as $k => $v) {
+                                if (isset($v['id'])) {
+                                    $goodsCompanyAttributeData[] = $v;
+                                } else {
+                                    $goodsCompanyAttributeData[] = [
+                                        'company_id' => $row['company_id'],
+                                        'goods_id' => $row['id'],
+                                        'sku_attribute_key_id' => $key,
+                                        'sku_attribute_value_id' => $k,
+                                        'sku_attribute_value' => $v['sku_attribute_value'],
+                                    ];
+                                }
+                            }
+                        }
+                        $goodsCompanyAttributeModel->saveAll($goodsCompanyAttributeData);
+
+                        // 更新sku表
+                        $specs = array_diff(array_column($row['goodsSpecs'], 'id'), array_column($post['specs_list'], 'id'));
+                        $return['specs'] = $specs;
+                        $specs && MallGoodsSpecs::destroy(array_values($specs), true);
+                        foreach ($post['specs_list'] as $key => &$val) {
+                            if (!isset($val['id'])) {
+                                $val['goods_id'] = $row['id'];
+                            }
+                        }
+                        $goodsSpecsModel->saveAll($post['specs_list']);
+                    } elseif ($row['companyAttributes']) {
+                        MallGoodsCompanyAttributes::destroy(array_column($row['companyAttributes'], 'id'), true);
+                        MallGoodsSpecs::destroy(array_column($row['goodsSpecs'], 'id'), true);
+                    }
+                }
             } catch (\Exception $e) {
-                $this->error('保存失败');
+                $this->error($e->getMessage());
             }
-            $save ? $this->success('保存成功') : $this->error('保存失败');
+            $save ? $this->success('保存成功', $return) : $this->error('保存失败');
         }
         $this->assign('row', $row);
+        $pidMenuList = (new MallGoodsCategory())->getPidMenuList();
+        $this->assign('pidMenuList', $pidMenuList);
         return $this->fetch();
     }
 

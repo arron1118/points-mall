@@ -10,8 +10,14 @@ namespace app\admin\controller\mall;
 use app\admin\traits\Curd;
 use app\common\model\MallGoodsSkuAttributeKeys;
 use app\common\model\MallGoodsSkuAttributeValues;
+use EasyAdmin\annotation\ControllerAnnotation;
 use EasyAdmin\annotation\NodeAnotation;
 
+/**
+ * GoodsSkuAttributeValues
+ * @package app\admin\controller\mall
+ * @ControllerAnnotation(title="商品SKU属性VALUE管理")
+ */
 class GoodsSkuAttributeValues extends \app\common\controller\AdminController
 {
 

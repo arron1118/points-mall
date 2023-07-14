@@ -10,6 +10,9 @@ namespace app\common\model;
 class MallGoodsCompanyAttributes extends TimeModel
 {
 
-    protected $deleteTime = false;
+    public function company()
+    {
+        return $this->belongsTo(CompanyUsers::class, 'company_id', 'id');
+    }
 
 }

@@ -27,4 +27,9 @@ class SystemAdmin extends TimeModel
             ->column('title', 'id');
     }
 
+    public function uploadfile()
+    {
+        return $this->hasMany(SystemUploadfile::class, 'admin_id', 'id');
+    }
+
 }

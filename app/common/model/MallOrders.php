@@ -10,4 +10,24 @@ namespace app\common\model;
 class MallOrders extends TimeModel
 {
 
+    public function users()
+    {
+        return $this->belongsTo(MemberUsers::class, 'user_id', 'id');
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(CompanyUsers::class, 'company_id', 'id');
+    }
+
+    public function order_items()
+    {
+        return $this->hasMany(MallOrderItems::class, 'order_no', 'order_no');
+    }
+
+    public function order_payment()
+    {
+        return $this->hasMany(MallOrderPayment::class, 'order_no', 'order_no');
+    }
+
 }

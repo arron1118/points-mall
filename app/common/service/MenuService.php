@@ -5,7 +5,7 @@
 // +----------------------------------------------------------------------
 // | PHP交流群: 763822524
 // +----------------------------------------------------------------------
-// | 开源协议  https://mit-license.org 
+// | 开源协议  https://mit-license.org
 // +----------------------------------------------------------------------
 // | github开源项目：https://github.com/zhongshaofa/EasyAdmin
 // +----------------------------------------------------------------------
@@ -27,7 +27,6 @@ class MenuService
     public function __construct($adminId)
     {
         $this->adminId = $adminId;
-        return $this;
     }
 
     /**
@@ -59,7 +58,7 @@ class MenuService
     {
         /** @var AuthService $authService */
         $authServer = app(AuthService::class, ['adminId' => $this->adminId]);
-        return $this->buildMenuChild(0, $this->getMenuData(),$authServer);
+        return $this->buildMenuChild(0, $this->getMenuData(), $authServer);
     }
 
     private function buildMenuChild($pid, $menuList, AuthService $authServer)
@@ -100,7 +99,7 @@ class MenuService
             ])
             ->order([
                 'sort' => 'desc',
-                'id'   => 'asc',
+                'id' => 'asc',
             ])
             ->select();
         return $menuData;

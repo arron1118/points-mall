@@ -15,5 +15,9 @@ class MallGoodsSkuAttributeValues extends TimeModel
         return $this->belongsTo(MallGoodsSkuAttributeKeys::class, 'sku_attribute_id', 'id');
     }
 
+    public function company_attributes()
+    {
+        return $this->hasMany(MallGoodsCompanyAttributes::class, 'sku_attribute_value_id', 'id');
+    }
 
 }
