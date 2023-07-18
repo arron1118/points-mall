@@ -20,7 +20,7 @@ class MallLotteryPrizes extends TimeModel
         return $this->belongsTo(MallGoods::class, 'goods_id', 'id');
     }
 
-    public function member_lottery_logs()
+    public function memberLotteryLogs()
     {
         return $this->belongsToMany(MemberLotteryLogs::class, 'prize_id', 'id');
     }

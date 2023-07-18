@@ -46,7 +46,7 @@
                         <td>
                             <div class="layuimini-upload">
                                 <input name="prize_list[{$i}][goods_id]" class="layui-input layui-col-xs6 prize-goods-id" type="hidden" value="{if $row['lotteryPrizes'] && isset($row['lotteryPrizes'][$i])}{$row['lotteryPrizes'][$i]['goods_id']|default=''}{/if}">
-                                <button type="button" class="layui-btn layui-btn-sm layui-btn-normal select-goods" id="select_goods{$i}" data-goods-select="prize_list[{$i}][goods_id]" data-goods-number="one" disabled><i class="fa fa-list"></i> 选择商品</button>
+                                <button type="button" class="layui-btn layui-btn-sm layui-btn-normal select-goods" id="select_goods{$i}" data-goods-select="prize_list[{$i}][goods_id]" data-goods-number="one" {if $row['lotteryPrizes'] && isset($row['lotteryPrizes'][$i]) && $row['lotteryPrizes'][$i]['type'] !== 4}disabled{/if}><i class="fa fa-list"></i> 选择商品</button>
                             </div>
                         </td>
                         <td>

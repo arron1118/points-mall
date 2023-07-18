@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<!-- saved from url=(0050)https://www.jq22.com/demo/WOW-master-150114214428/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <title>WOW</title>
+  <link rel="stylesheet" href="./animate.css">
+  <link rel="stylesheet" href="./site.css">
+  <style>
+    .wow:first-child {
+      visibility: hidden;
+    }
+  </style>
+  <!--[if IE]>
+    <script src="https://www.jq22.com/jquery/html5.min.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+  <div id="container">
+    <header>
+      <h1>WOW.js</h1>
+    </header>
+    <div id="main">
+      <section class="wow fadeInDown animated" style="background-color: rgb(241, 196, 15); visibility: visible; animation-name: fadeInDown;"></section>
+      <section class="wow pulse animated" style="background-color: rgb(231, 76, 60); visibility: visible; animation-duration: 1500ms; animation-iteration-count: infinite; animation-name: pulse;" data-wow-iteration="infinite" data-wow-duration="1500ms"></section>
+      <section class="section--purple wow slideInRight" data-wow-delay="2s" style="visibility: hidden; animation-delay: 2s; animation-name: none;"></section>
+      <section class="section--blue wow bounceInLeft" data-wow-offset="300" style="visibility: hidden; animation-name: none;"></section>
+      <section class="section--green wow slideInLeft" data-wow-duration="4s" style="visibility: hidden; animation-duration: 4s; animation-name: none;"></section>
+      <button id="moar">LOAD MOAR!!</button>
+    </div>
+  </div>
+  <script src="./wow.js.下载"></script>
+  <script>
+    wow = new WOW(
+      {
+        animateClass: 'animated',
+        offset:       100
+      }
+    );
+    wow.init();
+    document.getElementById('moar').onclick = function() {
+      var section = document.createElement('section');
+      section.className = 'section--purple wow fadeInDown';
+      this.parentNode.insertBefore(section, this);
+    };
+  </script>
+
+
+</body></html>

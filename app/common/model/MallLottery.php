@@ -14,14 +14,14 @@ class MallLottery extends TimeModel
         'prize_list',
     ];
 
-    public function getStartTimeTextAttr($value)
+    public function getStartTimeTextAttr($value, $data)
     {
-        return $value ?? date($this->dateFormat, $value);
+        return $data['start_time'] ? date($this->dateFormat, $data['start_time']) : '';
     }
 
-    public function getEndTimeTextAttr($value)
+    public function getEndTimeTextAttr($value, $data)
     {
-        return $value && date($this->dateFormat, $value);
+        return $data['end_time'] ? date($this->dateFormat, $data['end_time']) : '';
     }
 
     public function company()

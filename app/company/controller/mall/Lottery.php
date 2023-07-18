@@ -112,7 +112,7 @@ class Lottery extends \app\common\controller\CompanyController
      */
     public function edit($id)
     {
-        $row = $this->model->with(['lotteryPrizes'])->find($id);
+        $row = $this->model->with(['lotteryPrizes'])->append(['start_time_text', 'end_time_text'])->find($id);
         empty($row) && $this->error('数据不存在');
         if ($this->request->isPost()) {
             $post = $this->request->post();
@@ -124,6 +124,12 @@ class Lottery extends \app\common\controller\CompanyController
                     if ($value['type'] === '') {
                         unset($post['prize_list'][$key]);
                     } else {
+                        // 新增
+                        if (!$value['id']) {
+                            unset($value['id']);
+                            $value['lottery_id'] = $id;
+                        }
+
                         $prizes[] = $value;
                     }
                 }
@@ -138,12 +144,13 @@ class Lottery extends \app\common\controller\CompanyController
                     $post['end_time'] = strtotime($range[1]);
                 }
 
-//                $save = $this->model->save($post);
+                $save = $row->save($post);
 
-                $save = false;
                 if ($save) {
                     $row = $row->toArray();
-                    $arr = array_diff(array_column($row['lotteryPrizes'], 'id'), array_column($prizes, 'id'));
+                    $arr = count($row['lotteryPrizes']) > count($prizes) ?
+                        array_diff(array_column($row['lotteryPrizes'], 'id'), array_column($prizes, 'id'))
+                        : array_diff(array_column($prizes, 'id'), array_column($row['lotteryPrizes'], 'id'));
                     $arr && MallLotteryPrizes::destroy(array_values($arr), true);
 
                     (new MallLotteryPrizes())->saveAll($prizes);
@@ -151,12 +158,11 @@ class Lottery extends \app\common\controller\CompanyController
             } catch (\Exception $e) {
                 $this->error('保存失败');
             }
-            $save ? $this->success('保存成功') : $this->error('保存失败', $post);
+            $save ? $this->success('保存成功', $prizes) : $this->error('保存失败', $post);
         }
 
-        $row->range_time = $row->start_time && $row->end_time ? $row->start_time . ' - ' . $row->end_time : '';
+        $row->range_time = $row->start_time && $row->end_time ? $row->start_time_text . ' - ' . $row->end_time_text : '';
 
-//        dump($row->toArray());
         $this->assign([
             'typeList' => (new MallLotteryPrizes())->getTypeList(),
             'row' => $row,

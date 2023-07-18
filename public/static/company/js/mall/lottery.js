@@ -83,6 +83,7 @@ define(["jquery", "easy-admin"], function ($, ea) {
             $('.clear-prize-btn').on('click', function (e) {
                 $(this).closest('tr').find('input').val('')
                 $(this).closest('tr').find('select').val('')
+                $(this).closest('tr').find('img').prop('src', '')
             })
 
             ea.listen();
@@ -107,6 +108,7 @@ define(["jquery", "easy-admin"], function ($, ea) {
                 $(data.elem).closest('tr').find('.select-goods').prop('disabled', parseInt(data.value) !== 4)
             })
 
+            // 清空
             $('.clear-prize-btn').on('click', function (e) {
                 $(this).closest('tr').find('input').val('')
                 $(this).closest('tr').find('select').val('')
