@@ -1,0 +1,98 @@
+<div class="footer theme-bgblack theme-white theme-size12 py-5 ">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 col-sm-12">
+        <div class="row">
+          <div class="col-lg-2 col-6">
+            <div class="d-flex flex-column justify-content-center align-items-center">
+              <h6 class="theme-size20 mb-4">新手指南</h6>
+              <ul class="theme-size15 theme-subsecond">
+                <li><a href="#">购物流程</a></li>
+                <li><a href="#">购物需知</a></li>
+                <li><a href="#">联系客服</a></li>
+                <li><a href="#">常见问题</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-lg-2 col-6">
+            <div class="d-flex flex-column justify-content-center align-items-center">
+              <h6 class="theme-size20 mb-4">支付方式</h6>
+              <ul class="theme-size15 theme-subsecond">
+                <li><a href="#">积分使用</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-lg-2 col-6">
+            <div class="d-flex flex-column justify-content-center align-items-center">
+              <h6 class="theme-size20 mb-4">售后服务</h6>
+              <ul class="theme-size15 theme-subsecond">
+                <li><a href="#">退货政策</a></li>
+                <li><a href="#">退货流程</a></li>
+                <li><a href="#">退款说明</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-lg-2 col-6">
+            <div class="d-flex flex-column justify-content-center align-items-center">
+              <h6 class="theme-size20 mb-4">商品配送</h6>
+              <ul class="theme-size15 theme-subsecond">
+                <li><a href="#">运费说明</a></li>
+                <li><a href="#">配送范围</a></li>
+                <li><a href="#">发货说明</a></li>
+                <li><a href="#">物流查询</a></li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-lg-2 col-6">
+            <div class="d-flex flex-column justify-content-center align-items-center">
+              <h6 class="theme-size20 mb-4">品牌保证</h6>
+              <ul class="theme-size15">
+                <li><a href="#">官方授权</a></li>
+                <li><a href="#">海关监管</a></li>
+                <li><a href="#">免税包邮</a></li>
+                <li><a href="#">售后无忧</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-sm-12">
+        <div class="d-flex flex-column align-items-center mt-lg-0 mt-4">
+          <div class="text-center">
+            <image style="width: 200px; height: auto" src="__STATIC__/portal/imgs/logo-bottom.png" fit="contain">
+            </image>
+            <div class="theme-size15 theme-subsecond mt-4">积分商城 版权所有，并保留所有权利。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  new Vue({
+    el: '#searchApp',
+    data: function () {
+      return {
+        searchForm: {keyword: ''}
+      }
+    },
+    methods: {
+      searching() {
+        console.log(this.searchForm)
+        if (this.searchForm.keyword === '') {
+          this.$message({
+            message: '请输入搜索关键词！',
+            type: 'warning'
+          });
+          return
+        } else {
+          window.location.href = './searchList.html?keyword=' + this.searchForm.keyword
+        }
+
+      }
+    }
+  })
+</script>
+
+{include file="public/fixed-bottom" /}

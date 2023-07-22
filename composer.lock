@@ -2765,16 +2765,16 @@
         },
         {
             "name": "qcloud/cos-sdk-v5",
-            "version": "v2.6.2",
+            "version": "v2.6.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/tencentyun/cos-php-sdk-v5.git",
-                "reference": "92a1ee62b85ed4e7bf6836a684df5d7e3158d0ed"
+                "reference": "06ccc95599635abd3f431f470b79b8fb8ddbd6a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tencentyun/cos-php-sdk-v5/zipball/92a1ee62b85ed4e7bf6836a684df5d7e3158d0ed",
-                "reference": "92a1ee62b85ed4e7bf6836a684df5d7e3158d0ed",
+                "url": "https://api.github.com/repos/tencentyun/cos-php-sdk-v5/zipball/06ccc95599635abd3f431f470b79b8fb8ddbd6a0",
+                "reference": "06ccc95599635abd3f431f470b79b8fb8ddbd6a0",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -2833,9 +2833,9 @@
             ],
             "support": {
                 "issues": "https://github.com/tencentyun/cos-php-sdk-v5/issues",
-                "source": "https://github.com/tencentyun/cos-php-sdk-v5/tree/v2.6.2"
+                "source": "https://github.com/tencentyun/cos-php-sdk-v5/tree/v2.6.4"
             },
-            "time": "2023-04-07T07:38:24+00:00"
+            "time": "2023-07-12T03:41:07+00:00"
         },
         {
             "name": "qiniu/php-sdk",
@@ -3350,16 +3350,16 @@
         },
         {
             "name": "topthink/framework",
-            "version": "v6.1.3",
+            "version": "v6.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/top-think/framework.git",
-                "reference": "7c324e7011246f0064b055b62ab9c3921cf0a041"
+                "reference": "66eb9cf4d627df12911344cd328faf9bb596bf2c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/top-think/framework/zipball/7c324e7011246f0064b055b62ab9c3921cf0a041",
-                "reference": "7c324e7011246f0064b055b62ab9c3921cf0a041",
+                "url": "https://api.github.com/repos/top-think/framework/zipball/66eb9cf4d627df12911344cd328faf9bb596bf2c",
+                "reference": "66eb9cf4d627df12911344cd328faf9bb596bf2c",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -3415,9 +3415,9 @@
             ],
             "support": {
                 "issues": "https://github.com/top-think/framework/issues",
-                "source": "https://github.com/top-think/framework/tree/v6.1.3"
+                "source": "https://github.com/top-think/framework/tree/v6.1.4"
             },
-            "time": "2023-05-22T03:02:08+00:00"
+            "time": "2023-07-11T15:16:03+00:00"
         },
         {
             "name": "topthink/think-captcha",

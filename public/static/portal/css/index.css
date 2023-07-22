@@ -1,0 +1,224 @@
+/* publish */
+ul{
+    padding: 0;
+}
+li{
+    list-style: none;
+}
+.text-indent2{
+    text-indent: 2rem;
+}
+.line1{
+    text-overflow: -o-ellipsis-lastline;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-line-clamp: 1;
+		line-clamp: 1;
+		-webkit-box-orient: vertical;
+}
+.line3{
+    text-overflow: -o-ellipsis-lastline;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		display: -webkit-box;
+		-webkit-line-clamp: 3;
+		line-clamp: 3;
+		-webkit-box-orient: vertical;
+}
+a{
+    text-decoration: none;
+    color: #606462;
+}
+.theme-black{
+    color: #535353;
+}
+.theme-red{
+    color: #FF2C49;
+}
+.theme-gray{
+    color: #666666;
+}
+.theme-second{
+    color: #999999;
+}
+.theme-subsecond{
+    color: #A9A9A9;
+}
+.theme-white{
+    color: #fff;
+}
+
+.theme-bgblack{
+    background-color: #535353;
+}
+.theme-bgred{
+    background-color: #FF2C49;
+}
+.theme-bgwhite{
+    background-color: #fff;
+}
+.theme-bg1{
+   background-color: #F0F0F0;
+}
+.theme-size15{
+    font-size: 15px;
+}
+.theme-size12{
+    font-size: 12px;
+}
+.theme-size20{
+    font-size: 20px;
+}
+.theme-size30{
+    font-size: 30px;
+}
+
+.theme-defaultbtn{
+
+}
+.theme-plainbtn{
+    text-align: center;
+    width: 150px;
+    height: 40px;
+    line-height: 40px;
+    color: #1980FF;
+    background-color: #e8f2ff;
+     border-radius: 4px;
+}
+.theme-btn1{
+    display: block;
+    background-color: #FF2C49;
+    color: #fff;
+    text-align: center;
+    font-size: 15px;
+    width: 110px;
+    height: 40px;
+    line-height: 40px;
+    cursor: pointer;
+}
+.theme-btn2{
+    width: 90px;
+    height: 30px;
+    color: #FF2C49;
+    border: 1px solid #FF2C49;
+    cursor: pointer;
+}
+
+.theme-tipsborder{
+    border: 1px solid #D3A569;
+}
+/* @media (min-width: 576px) {
+    .fixed-sm-bottom {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1030;
+      }
+}
+@media (min-width: 768px) {}
+@media (min-width: 992px) {}
+@media (min-width: 1200px) {}
+@media (min-width: 1400px) {} */
+
+
+
+/* 
+element-ui 
+*/
+.el-form-item__label {
+    font-size: 15px !important;
+}
+.el-table{
+    border: 1px solid #ddd !important;
+}
+.el-table__header-wrapper th{
+    border-bottom: 1px solid #ddd !important;
+}
+.el-table__body-wrapper td{
+    border-bottom: 1px solid #ddd !important;
+}
+.el-dialog--center .el-dialog__body{
+    padding: 0!important;
+}
+.draw .el-dialog__header{
+    padding: 0 !important;
+}
+.draw .el-dialog{
+    background: none !important;
+    box-shadow: none !important;
+}
+/* 其他
+ */
+ .productlist .theme-btn1:hover{
+    background-color: #fff;
+    color: #FF2C49;
+    border: 1px solid #FF2C49;
+ }
+#searchApp .el-input__inner{
+    border: 1px solid #FF2C49;
+}
+#searchApp .el-input-group__append, .el-input-group__prepend{
+    background-color: #FF2C49;
+    color: #fff;
+    border: 1px solid #FF2C49;
+}
+#searchApp .el-input {
+    font-size: 15px
+}
+.top ul li a:hover{
+color:#FF2C49;
+}
+.topnav ul li a:hover{
+    background-color: #fff;
+    color: #FF2C49;
+}
+.footer ul li a{
+    color: #A9A9A9;
+}
+.footer ul li a:hover {
+    color:#FF2C49;
+}
+.infoslist ul li{
+    line-height: 30px;
+}
+.a-hover{
+    cursor: pointer;
+}
+.a-hover:hover{
+    color: #FF2C49;
+}
+.codebtn .el-button:hover{
+    color: #FF2C49;
+    border: 1px solid #FF2C49;
+    background-color: #fff;
+}
+#menuApp .el-menu-item.is-active{
+    color: #FF2C49;
+}
+.setting-pages li a{
+    color: #999
+}
+.setting-pages li a:hover{
+    color: #FF2C49;
+}
+.setting-pages li .active{
+    color: #FF2C49;
+}
+.navbar-toggler-icon{
+    display: inline-block;
+    width: 1.5em;
+    height: 1.5em;
+    vertical-align: middle;
+    background-image: url('../imgs/下载.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 100%;
+}
+.draw-bgi{
+    background-image: url('../imgs/c1.png');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100% 100%;
+}

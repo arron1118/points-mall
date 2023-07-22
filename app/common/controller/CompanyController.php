@@ -6,9 +6,7 @@ namespace app\common\controller;
 
 use app\admin\service\ConfigService;
 use app\BaseController;
-use app\common\constants\AdminConstant;
 use app\common\model\CompanyUsers;
-use app\common\service\AuthService;
 use EasyAdmin\tool\CommonTool;
 use think\facade\Cookie;
 use think\facade\Env;

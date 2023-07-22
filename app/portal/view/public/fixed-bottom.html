@@ -1,0 +1,8 @@
+<script>
+  // 当内容不够多,但是底部要兼容手机版,不能用fixed-bottom的时候用
+  window.onload = function () {
+    var main = document.querySelector('.content');
+    var h = window.innerHeight * 0.08;
+    main.style.paddingBottom = h + 'px';
+  }
+</script>

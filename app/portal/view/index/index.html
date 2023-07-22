@@ -1,0 +1,54 @@
+
+<div class="content container mt-4 mb-5">
+    <image style="width: 100%; height: auto" src="__STATIC__/portal/imgs/banner.png" fit="contain" class="mb-5"></image>
+    <div class="title">
+        <h1 class="text-center theme-size30 mb-4">检测排查案例</h1>
+        <h3 class="text-center theme-size20 theme-second mb-5">16年房屋安全鉴定经验，服务超3000+项目案例见证</h3>
+    </div>
+    <div class="productlist">
+        <div class="row g-5">
+            {foreach $goods as $key => $val}
+            <div class="col-lg-3 col-6">
+                <div class="">
+                    <image style="width: 100%; height: auto" src="{$val.logo}" fit="contain">
+                    </image>
+                    <div class="theme-size20 line1 my-2">
+                        {$val.title}
+                    </div>
+                    <div class="theme-size15 theme-second mb-3">限时价：<span class="theme-red">{$val.integral}积分</span></div>
+                    <a href="{:url('/detail', ['id' => $val.id])}" class="theme-btn1">马上兑换</a>
+                </div>
+            </div>
+            {/foreach}
+        </div>
+        <div class="text-center theme-second theme-size15 my-5">没有更多了~</div>
+    </div>
+    <div class="row g-4">
+        <div class="col-lg-3 col-6">
+            <div class="d-flex align-items-center">
+                <image style="width: 64px; height: auto" src="__STATIC__/portal/imgs/h1.png" fit="contain"></image>
+                <div class="theme-size20 ms-4">正品保证</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-6">
+            <div class="d-flex align-items-center justify-content-center">
+                <image style="width: 64px; height: auto" src="__STATIC__/portal/imgs/h2.png" fit="contain"></image>
+                <div class="theme-size20 ms-4">海关监管</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-6">
+            <div class="d-flex align-items-center justify-content-center">
+                <image style="width: 64px; height: auto" src="__STATIC__/portal/imgs/h3.png" fit="contain"></image>
+                <div class="theme-size20 ms-4">闪电发货</div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-6">
+            <div class="d-flex align-items-center justify-content-end">
+                <image style="width: 64px; height: auto" src="__STATIC__/portal/imgs/h4.png" fit="contain"></image>
+                <div class="theme-size20 ms-4">售后无忧</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

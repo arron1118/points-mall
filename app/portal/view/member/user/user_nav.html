@@ -1,0 +1,17 @@
+<div class="col-lg-3 col-12">
+  <h5 class="theme-size20 ps-3 mb-4 pt-2">会员功能</h5>
+  <ul class="nav flex-lg-column flex-row setting-pages">
+    <li class="nav-item">
+      <a class="nav-link {if '[select]' === '/'}active{/if}" aria-current="page" href="{:url('/account')}">账号信息</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link {if '[select]' === 'password'}active{/if}" href="{:url('/account/password')}">安全设置</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link {if '[select]' === 'address'}active{/if}" href="{:url('/account/address')}">收货地址</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link {if '[select]' === 'order'}active{/if}" href="{:url('/account/order')}">我的订单</a>
+    </li>
+  </ul>
+</div>

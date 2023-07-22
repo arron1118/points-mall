@@ -1,0 +1,71 @@
+<div class="content container mb-5 mt-4">
+  <div class="row">
+    {include file="member/user/user_nav" select="order" /}
+    <div class="col-lg-9 col-12">
+      <div class="theme-size20 pt-2 ps-lg-0 ps-3 mt-lg-0 mt-4">我的兑换订单列表</div>
+      <div class="my-5 border-bottom" id="tableApp">
+
+        <template>
+          <el-table ref="multipleTable" border :data="tableData" tooltip-effect="dark"
+                    style="width: 100%">
+            <el-table-column label="商品图片">
+              <template slot-scope="scope">
+                <el-avatar shape="square" :size="100" fit="contain" :src="scope.row.url">
+                </el-avatar>
+              </template>
+            </el-table-column>
+            <el-table-column label="商品名称">
+              <template slot-scope="scope">{{ scope.row.date }}</template>
+            </el-table-column>
+            <el-table-column prop="name" label="积分" align="center">
+              <template slot-scope="scope">{{ scope.row.num }}</template>
+            </el-table-column>
+            <el-table-column prop="address" label="数量" align="center">
+              <template slot-scope="scope">{{ scope.row.date }}</template>
+            </el-table-column>
+
+            <el-table-column label="订单状态" align="center">
+              <template slot-scope="scope">{{ scope.row.date }}</template>
+            </el-table-column>
+            <el-table-column label="成交时间" align="center">
+              <template slot-scope="scope">{{ scope.row.date }}</template>
+            </el-table-column>
+
+          </el-table>
+        </template>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  new Vue({
+    el: '#tableApp',
+    data: function () {
+      return {
+        tableData: [{
+          id: 1,
+          url: './imgs/1.png',
+          date: '2016-05-02',
+          name: '王小虎',
+          num: 1,
+          address: '上海市普陀区金沙江路 1518 弄'
+        }, {
+          id: 2,
+          url: './imgs/1.png',
+          date: '2016-05-04',
+          name: '王小虎',
+          num: 1,
+          address: '上海市普陀区金沙江路 1517 弄'
+        }]
+      }
+    },
+    methods: {
+
+
+
+
+
+    }
+  })
+</script>

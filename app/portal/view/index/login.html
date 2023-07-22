@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {include file="public/meta" /}
+</head>
+
+<body>
+    <div class="header">
+        <div class="container my-5">
+            <img src="__STATIC__/portal/imgs/logo.png" alt="Logo" class="img-fluid"
+                style="width: 129px; height: auto;">
+        </div>
+    </div>
+    <div  class="content theme-bgred">
+    <div class="container my-5 py-5">
+            <div class="row justify-content-between align-items-center">
+                <div class="col-lg-6 col-sm-12 mb-lg-0 mb-4 text-center">
+                    <image style="height: auto;width: 100%;" src="__STATIC__/portal/imgs/adv1.png" fit="contain">
+                    </image>
+                </div>
+            <div class="col-lg-5 col-sm-12 px-lg-5">
+                <div id="loginApp" class="theme-bgwhite rounded-3">
+                    <div class="theme-red py-4 text-center theme-size30 fw-bold">用户登录</div>
+                    <el-form :model="form" :rules="formRules" ref="form" label-width="60px" label-position="left" class="demo-ruleForm px-4">
+                        <el-form-item prop="username" label="用户名">
+                            <el-input v-model="form.username" placeholder=""></el-input>
+                        </el-form-item>
+                        <el-form-item prop="password" label="密码">
+                            <el-input v-model="form.password" show-password placeholder=""></el-input>
+                        </el-form-item>
+                        <el-form-item prop="code" label="验证码">
+                            <div class="row gx-4">
+                                <div class="col-8"><el-input v-model="form.code" placeholder=""></el-input></div>
+                                <div class="col-4 theme-btn4" @click="getCode"> <image style="height: auto;width: 100%;" src="__STATIC__/portal/imgs/code.png" fit="contain">
+                                </image></div>
+                            </div>
+                        </el-form-item>
+                        <el-form-item>
+                            <div class="theme-size12 theme-second text-end">忘记密码？</div>
+                        </el-form-item>
+                    </el-form>
+                    <div class="py-4 px-4">
+                        <el-button  class="w-100 theme-btn4 mb-2 p-3" style="background-color: #FF2C49; color:#fff;" @click="onSubmit('form')">登录</el-button>
+                        <div class="text-center"><a href="./register.html" class="theme-size12 theme-second mb-4 a-hover">没有账户？马上注册</a></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+    <div class="footer theme-second theme-size15 text-center py-5">
+        <div class="container">
+            <div class="mb-4">
+                <a href="#" class="theme-second me-4">关于我们</a>
+                <a href="#" class="theme-second me-4">帮助中心</a>
+                <a href="#" class="theme-second me-4">联系我们</a>
+                <a href="#" class="theme-second me-4">法律声明及隐私协议</a>
+            </div>
+            <div>
+               <span class="me-4">公安备案号：UT1254132SOXN</span>
+               <span class="me-4">京ICP124125号</span>
+               <span class="me-4">贝乐2014-2023商品版权所有</span>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    new Vue({
+        el: '#loginApp',
+        data: function () {
+            var checkPassword = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入密码'));
+                } else {
+                    callback();
+                }
+            };
+            var checkCode = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入验证码'));
+                } else {
+                    callback();
+                }
+            };
+            var checkUsername = (rule, value, callback) => {
+                if (value === '') {
+                    callback(new Error('请输入用户名'));
+                } else {
+                    callback();
+                }
+            };
+            return {
+             form: {
+                    code: "",
+                    username: "",
+                    password: ""
+                 },
+                 formRules: {
+                    username: [
+                        { validator: checkUsername, trigger: 'blur' }
+                    ],
+                    code: [
+                        { validator: checkCode, trigger: 'blur' }
+                    ],
+                    password: [
+                        { validator: checkPassword, trigger: 'blur' }
+                    ],
+                },
+            }
+
+        },
+        methods:{
+            onSubmit(formName){
+                this.$refs[formName].validate((valid) => {
+                    if (valid) {
+                        console.log(this.form)
+                        // 成功后跳转
+                        window.location.href = './index.html'
+                        // axios.post('https://www.baidu.com', {username: 'lqp', age: 18}).then(res => {
+                        //     console.log(res)
+                        // }).catch(err => {
+                        //     console.log(err)
+                        // })
+
+                    } else {
+                        console.log('error submit!!');
+                        return false;
+                    }
+                });
+            },
+            getCode(){
+                console.log('验证码')
+            }
+        }
+    })
+</script>
+{include file="public/fixed-bottom" /}
+ </html>

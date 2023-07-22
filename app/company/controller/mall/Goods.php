@@ -195,7 +195,7 @@ class Goods extends CompanyController
             } catch (\Exception $e) {
                 $this->error($e->getMessage());
             }
-            $save ? $this->success('保存成功', $return) : $this->error('保存失败');
+            $save ? $this->success('保存成功', $return) : $this->error('保存失败', $post);
         }
         $this->assign('row', $row);
         $pidMenuList = (new MallGoodsCategory())->getPidMenuList();

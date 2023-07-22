@@ -9,3 +9,7 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 use think\facade\Route;
+
+Route::get('haha', function () {
+    return 'haha';
+});

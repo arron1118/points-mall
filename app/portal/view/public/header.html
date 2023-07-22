@@ -1,0 +1,89 @@
+<div class="header">
+  <div class="container">
+    <nav class="navbar navbar-expand-lg p-0 ">
+      <div class="container m-2 top ">
+        <a href="/" class="me-4">
+          <img src="__STATIC__/portal/imgs/logo.png" alt="Logo" class="img-fluid" style="width: 129px; height: auto;">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="offcanvas offcanvas-end d-lg-flex flex-lg-row justify-content-lg-end px-lg-0 px-2"
+             tabindex="-1" id="offcanvasNavbar"
+             aria-labelledby="offcanvasNavbarLabel">
+          <div class="offcanvas-header ">
+            <h5 class="offcanvas-title" id="offcanvasNavbarLabel">
+              <image style="width: 143px; height: auto" src="__STATIC__/portal/imgs/logo.png"></image>
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                    aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body my-2 p-0 ">
+            <!-- 下面是vue语法 -->
+            <div id="searchApp">
+              <el-form ref="searchForm" :model="searchForm" @submit.native.prevent>
+                <el-form-item label="" class="mb-0">
+                  <el-input placeholder="" clearable v-model.trim="searchForm.keyword"
+                            @keyup.enter.native="searching">
+                    <el-button slot="append" @click="searching">搜索</el-button>
+                  </el-input>
+                </el-form-item>
+              </el-form>
+            </div>
+            <ul class="navbar-nav justify-content-start flex-grow-1 ms-lg-4">
+              <li class="nav-item dropdown me-lg-4 me-sm-0">
+                <a class="nav-link theme-second theme-size15" href="{:url('/account/order')}"
+                   role="button">
+                  我的订单
+                </a>
+              </li>
+              <li class="nav-item dropdown me-lg-4 me-sm-0">
+                <a class="nav-link theme-second theme-size15" href="{:url('/account')}"
+                   role="button">
+                  账号设置
+                </a>
+              </li>
+              <li class="nav-item dropdown me-lg-4 me-sm-0">
+                <a class="nav-link theme-second theme-size15" href="{:url('/register')}" role="button">
+                  免费注册
+                </a>
+              </li>
+              <li class="nav-item me-lg-4 me-sm-0 theme-red">
+                <a class="nav-link theme-red theme-size15" href="{:url('/login')}" role="button">
+                  登录
+                </a>
+              </li>
+            </ul>
+
+          </div>
+        </div>
+      </div>
+    </nav>
+  </div>
+  <div class="theme-bgred topnav">
+    <div class="container">
+      <nav class="navbar navbar-expand-lg p-0 ">
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
+             aria-labelledby="offcanvasNavbarLabel">
+          <div class="offcanvas-body p-0">
+            <ul class="navbar-nav justify-content-start flex-grow-1 ">
+              <li class="nav-item dropdown me-lg-4 me-sm-0">
+                <a class="nav-link theme-white theme-size20 p-3 active" href="{:url('/')}"
+                   role="button">
+                  积分兑换
+                </a>
+              </li>
+              <li class="nav-item dropdown me-lg-4 me-sm-0">
+                <a class="nav-link theme-white theme-size20 p-3" href="{:url('/lottery')}"
+                   role="button">
+                  盲盒抽奖
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </div>
+</div>

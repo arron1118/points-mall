@@ -1,0 +1,247 @@
+<div class="content container mb-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-3 col-8">
+      <image style="width: 100%; height: auto;" src="__STATIC__/portal/imgs/c0.gif" fit="contain"></image>
+    </div>
+  </div>
+  <div class="row justify-content-center draw-bgi">
+    <div class="col-lg-6 col-12 p-0">
+      <div id="drawApp" v-if="prizes.length">
+        <div class="d-flex justify-content-center">
+          <div v-if="!isPhone">
+            <lucky-grid ref="myLucky" :width="!isPhone?width:width" :height="!isPhone?height:height2"
+                        :rows="rows" :cols="cols" :prizes="prizes"
+                        :blocks="blocks" @start="startCallback('myLucky')"
+                        @end="endCallback" />
+          </div>
+          <div v-else>
+            <lucky-grid ref="myLucky2" :width="width2" :height="height2" :rows="rows" :cols="cols"
+                        :prizes="prizes" :blocks="blocks" :buttons="buttons2" @start="startCallback('myLucky2')"
+                        @end="endCallback" />
+          </div>
+          <!-- 弹框 -->
+          <div class="draw">
+            <el-dialog title="" center :visible.sync="dialogTableVisible" :show-close="false"
+                       :width="isPhone ? '80%' : '20%'">
+              <div slot="title" class="position-relative">
+                <div class="position-relative">
+                  <image style="width: 100%; height: auto;" src="__STATIC__/portal/imgs/draw-top.png" fit="contain">
+                  </image>
+                  <div class="position-absolute "
+                       style="font-size: 25px;color: #fff;top: 25%; left: 37%;">
+                    {{ draw.title }}</div>
+                </div>
+              </div>
+              <div class="position-absolute" style="z-index: -1;left: 0%;top: 28%; width: 100%;">
+                <div style="background-color: #FEF2D8;text-align: center;" class="rounded">
+                  <div class="row justify-content-center">
+                    <div class="col-4">
+                      <div style="margin-top: 115px;" class="mb-5">
+                        <image style="width: 100%; height: auto;" :src="draw.url"
+                               fit="contain">
+                        </image>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="theme-red pb-5" style="text-align: center; font-size: 25px;">
+                    <span>{{ draw.content }}</span><br /><span>获得{{ draw.prize }}！</span>
+                  </div>
+                </div>
+                <div class="text-center">
+                  <el-button
+                          style="background-color: #FFD502; color:#CD6A05;margin-top: 20px;border-radius: 50px;letter-spacing: 4px;border:1px solid #FFD502;"
+                          @click="getPrize">{{ draw.btn }}</el-button>
+                </div>
+              </div>
+            </el-dialog>
+          </div>
+        </div>
+        <div class="d-flex justify-content-center mt-3">
+          <div style="width: 110px; height: 40px;">
+            <img src="__STATIC__/portal/imgs/buttons.png" class="layui-btn" @click="startCallback('myLucky')" style="width: 100%; cursor: pointer;" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="text-center theme-size20 mt-5 mb-4" style="color: #333;">活动规则</div>
+  <div class="theme-gray theme-size15 d-flex justify-content-center">
+    <div class="text-start">
+      <p>1、每天一次抽奖机会，每次抽奖需使用50积分</p>
+      <p>2、抽中奖可凭截图发送客服，并提供收货地址及联系人</p>
+      <p>3、抽中现金券，可直接到卡包种获取;</p>
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/@vue/composition-api@1.2.4/dist/vue-composition-api.prod.js"></script>
+<script src="https://unpkg.com/vue-demi@0.11.4"></script>
+<script src="https://unpkg.com/@lucky-canvas/vue@0.1.11"></script>
+<script>
+  new Vue({
+    el: '#drawApp',
+    data() {
+      // 背景
+      const blocksImg = {
+        src: '/static/portal/imgs/c2.png',
+        width: '100%',
+        height: '100%'
+      }
+      // 奖品
+      // const prizeImg =
+      // {
+      //     src: './imgs/71-63.gif',
+      //     width: '60%',
+      //     height: '60%',
+      //     top: '22%'
+      // }
+      // 按钮
+      const buttonsImg = {
+        src: '/static/portal/imgs/buttons.png',
+        width: '100%',
+        top: '5%'
+      }
+
+      const rows = 4
+      const cols = 4
+
+      return {
+        dialogTableVisible: false,
+        rows: rows,
+        cols: cols,
+        blocks: [{ padding: '30px', imgs: [blocksImg] }], //背景
+        prizes: [], // 奖品
+        // web
+        width: (120 * cols) + 'px',
+        height: (105 * rows) + 'px',
+        buttons: [ // 按钮
+          {
+            x: 1,
+            y: 1,
+            imgs: [buttonsImg],
+            fonts: [{ text: '*每抽奖一次将消耗50积分', fontColor: '#fff', fontSize: '15px', top: '85%' }],
+            row: rows > 2 ? rows - 2 : 1,
+            col: cols > 2 ? cols - 2 : 1,
+          }
+        ],
+        // 移动端
+        width2: '390px',
+        height2: '340px',
+        buttons2: [
+          {
+            x: 1,
+            y: 1,
+            imgs: [buttonsImg],
+            fonts: [{ text: '*每抽奖一次将消耗50积分', fontColor: '#fff', fontSize: '12px', top: '85%' }],
+            row: rows > 2 ? rows - 2 : 1,
+            col: cols > 2 ? cols - 2 : 1,
+          }
+        ],
+        isPhone: false, // 判断设备
+        draw:{} // 转盘获奖信息
+      }
+    },
+    created() {
+      this.isPhone = this.IsPhone()
+      this.prizeItems()
+    },
+    methods: {
+      prizeItems(){
+        var prizeImg = {
+          src: '/static/portal/imgs/71-63.gif',
+          width: '60%',
+          height: '60%',
+          top: '22%'
+        }
+
+        let prizes = [],
+                rows = this.rows,
+                cols = this.cols;
+        console.log(this.buttons)
+        console.log(rows, cols)
+        for (let i = 0; i < cols; i ++) {
+          for (let j = 0; j < rows; j ++) {
+            if (i < cols - 1) {
+              prizes.push({ x: i, y: j, range: i + j, imgs: [prizeImg], fonts: [{ text: '' + i + j, top: '20%', fontColor: 'red' }], background: '#fef0ef', shadow: '0px 10px 0px #ffc4b8' })
+              break;
+            } else if (j < rows - 1) {
+              prizes.push({ x: i, y: j, range: i + j, imgs: [prizeImg], fonts: [{ text: '' + i + j, top: '20%', fontColor: 'red' }], background: '#fef0ef', shadow: '0px 10px 0px #ffc4b8' })
+            }
+          }
+        }
+
+        for (let i = cols - 1; i >= 0; i --) {
+          for (let j = rows - 1; j >= 0; j --) {
+            if (i > 0) {
+              prizes.push({ x: i, y: j, range: i + j, imgs: [prizeImg], fonts: [{ text: '' + i + j, top: '20%', fontColor: 'red' }], background: '#fef0ef', shadow: '0px 10px 0px #ffc4b8' })
+              break;
+            } else if (j > 0) {
+              prizes.push({ x: i, y: j, range: i + j, imgs: [prizeImg], fonts: [{ text: '' + i + j, top: '20%', fontColor: 'red' }], background: '#fef0ef', shadow: '0px 10px 0px #ffc4b8' })
+            }
+          }
+        }
+
+        this.prizes = prizes
+        console.log('prizes', this.prizes)
+      },
+      getPrize(){
+        this.dialogTableVisible = false
+      },
+      IsPhone() {
+        var info = navigator.userAgent;
+        console.log('userAgent', info)
+        //通过正则表达式的test方法判断是否包含“Mobile”字符串
+        var isPhone = /mobile/i.test(info);
+        //如果包含“Mobile”（是手机设备）则返回true
+        return isPhone;
+      },
+      // 点击抽奖按钮会触发star回调
+      startCallback(value) {
+        console.log(this)
+        if (value == 'myLucky2') {
+          // 调用抽奖组件的play方法开始游戏
+          this.$refs.myLucky2.play()
+          // 模拟调用接口异步抽奖
+          setTimeout(() => {
+            // 假设后端返回的中奖索引是0
+            // const index = 0
+            // 调用stop停止旋转并传递中奖索引
+            this.$refs.myLucky2.stop()
+
+          }, 3000)
+        } else {
+          // 调用抽奖组件的play方法开始游戏
+          this.$refs.myLucky.play()
+          // 模拟调用接口异步抽奖
+          setTimeout(() => {
+            // 假设后端返回的中奖索引是0
+            // const index = 0
+            // 调用stop停止旋转并传递中奖索引
+            this.$refs.myLucky.stop()
+
+          }, 3000)
+        }
+      },
+      // 抽奖结束会触发end回调
+      endCallback(prize) {
+        console.log(prize)
+        this.dialogTableVisible = true
+        this.draw2 = {
+          title: '很遗憾！',
+          url: '/static/portal/imgs/none.png',
+          content: '很遗憾，',
+          prize: '未中奖，再试一次吧？',
+          btn: '谢谢参与'
+        }
+        this.draw = {
+          title: '中奖啦！',
+          url: prize.imgs[0].src, // './imgs/draw-product.png'
+          content: '恭喜你，',
+          prize: prize.fonts[0].text, // '获得applewatch一台！'
+          btn: '立即领取'
+        }
+      },
+
+    }
+  })
+</script>

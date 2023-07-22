@@ -256,7 +256,7 @@ define(["jquery", "easy-admin"], function ($, ea) {
                     type: 'hidden',
                     class: 'sku-attribute-value'
                 })).append($('<input />', {
-                    name: `attribute_list["${group}"][${data.id}]`,
+                    name: `attribute_list[${group}][${data.id}]`,
                     value: obj.val(),
                     type: 'hidden',
                     class: 'sku-attribute-value'
@@ -288,10 +288,15 @@ define(["jquery", "easy-admin"], function ($, ea) {
                     if (isFinite($(this).val())) {
                         let stock = 0
                         $.each($('.specs-stock'), (index, item) => {
-                            stock += parseInt($(item).val())
+                            let num = $(item).val()
+                            if (num && isFinite(num)) {
+                                stock += parseInt(num);
+                            }
                         })
 
                         ts.val(stock)
+                    } else {
+                        $(this).val('')
                     }
                 }))
 
@@ -316,7 +321,10 @@ define(["jquery", "easy-admin"], function ($, ea) {
                 $('.attribute-list-table table tbody tr#' + obj.data('id')).remove()
                 let stock = 0
                 $.each($('.specs-stock'), (index, item) => {
-                    stock += parseInt($(item).val())
+                    let num = $(item).val()
+                    if (num && isFinite(num)) {
+                        stock += parseInt(num);
+                    }
                 })
 
                 ts.val(stock)
