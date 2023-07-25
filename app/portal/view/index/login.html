@@ -23,16 +23,16 @@
                 <div id="loginApp" class="theme-bgwhite rounded-3">
                     <div class="theme-red py-4 text-center theme-size30 fw-bold">用户登录</div>
                     <el-form :model="form" :rules="formRules" ref="form" label-width="60px" label-position="left" class="demo-ruleForm px-4">
-                        <el-form-item prop="username" label="用户名">
-                            <el-input v-model="form.username" placeholder=""></el-input>
+                        <el-form-item prop="username" label="手机号">
+                            <el-input v-model="form.phone" placeholder="请输入手机号"></el-input>
                         </el-form-item>
                         <el-form-item prop="password" label="密码">
                             <el-input v-model="form.password" show-password placeholder=""></el-input>
                         </el-form-item>
                         <el-form-item prop="code" label="验证码">
                             <div class="row gx-4">
-                                <div class="col-8"><el-input v-model="form.code" placeholder=""></el-input></div>
-                                <div class="col-4 theme-btn4" @click="getCode"> <image style="height: auto;width: 100%;" src="__STATIC__/portal/imgs/code.png" fit="contain">
+                                <div class="col-8"><el-input v-model="form.captcha" placeholder=""></el-input></div>
+                                <div class="col-4 theme-btn4" @click="getCaptcha()"> <image style="height: auto; width: 100%;" :src="captcha" fit="contain">
                                 </image></div>
                             </div>
                         </el-form-item>
@@ -42,7 +42,7 @@
                     </el-form>
                     <div class="py-4 px-4">
                         <el-button  class="w-100 theme-btn4 mb-2 p-3" style="background-color: #FF2C49; color:#fff;" @click="onSubmit('form')">登录</el-button>
-                        <div class="text-center"><a href="./register.html" class="theme-size12 theme-second mb-4 a-hover">没有账户？马上注册</a></div>
+                        <div class="text-center"><a href="/register.html" class="theme-size12 theme-second mb-4 a-hover">没有账户？马上注册</a></div>
                     </div>
                 </div>
             </div>
@@ -68,75 +68,5 @@
     </div>
 </body>
 
-<script>
-    new Vue({
-        el: '#loginApp',
-        data: function () {
-            var checkPassword = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请输入密码'));
-                } else {
-                    callback();
-                }
-            };
-            var checkCode = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请输入验证码'));
-                } else {
-                    callback();
-                }
-            };
-            var checkUsername = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请输入用户名'));
-                } else {
-                    callback();
-                }
-            };
-            return {
-             form: {
-                    code: "",
-                    username: "",
-                    password: ""
-                 },
-                 formRules: {
-                    username: [
-                        { validator: checkUsername, trigger: 'blur' }
-                    ],
-                    code: [
-                        { validator: checkCode, trigger: 'blur' }
-                    ],
-                    password: [
-                        { validator: checkPassword, trigger: 'blur' }
-                    ],
-                },
-            }
 
-        },
-        methods:{
-            onSubmit(formName){
-                this.$refs[formName].validate((valid) => {
-                    if (valid) {
-                        console.log(this.form)
-                        // 成功后跳转
-                        window.location.href = './index.html'
-                        // axios.post('https://www.baidu.com', {username: 'lqp', age: 18}).then(res => {
-                        //     console.log(res)
-                        // }).catch(err => {
-                        //     console.log(err)
-                        // })
-
-                    } else {
-                        console.log('error submit!!');
-                        return false;
-                    }
-                });
-            },
-            getCode(){
-                console.log('验证码')
-            }
-        }
-    })
-</script>
-{include file="public/fixed-bottom" /}
  </html>

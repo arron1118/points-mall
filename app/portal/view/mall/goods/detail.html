@@ -1,5 +1,5 @@
 
-<div class="content container my-5">
+<div class="content container py-5">
   <div id="numberApp">
     <div v-if="goods">
       <div class="row mb-4 g-5">
@@ -10,12 +10,14 @@
         <div class="col-lg-8 col-sm-12" ref="myRef">
           <input type="hidden" name="goods_id" :value="goods.id" ref="id" />
           <div class="theme-size30">{{ goods.title }}<span class="theme-second theme-size15 float-end pt-4">月兑：{{ goods.sales }}</span></div>
-          <div v-for="(i, k) in goods.attribute_list" :key="i">
-            <div class="theme-gray theme-size15 my-4">{{ k }}</div>
-            <div class="row g-4 w-lg-75 w-100 mb-4">
-              <div class="col-lg-4 col-6" v-for="(item, index) in i" :key="index">
-                <div class="theme-size15 p-2 text-center rounded" style="cursor: pointer;" :class="colorIndex === index ? 'theme-red border border-danger' : 'theme-second theme-bg1'" @click="changeColorCategray(item, index)">
-                  {{ item }}
+          <div v-if="goods.attribute_list">
+            <div v-for="(i, k) in goods.attribute_list" :key="i">
+              <div class="theme-gray theme-size15 my-4">{{ k }}</div>
+              <div class="row g-4 w-lg-75 w-100 mb-4">
+                <div class="col-lg-4 col-6" v-for="(item, index) in i" :key="index">
+                  <div class="theme-size15 p-2 text-center rounded" style="cursor: pointer;" :class="colorIndex === index ? 'theme-red border border-danger' : 'theme-second theme-bg1 border'" @click="changeColorCategray(item, index)">
+                    {{ item }}
+                  </div>
                 </div>
               </div>
             </div>
@@ -56,117 +58,4 @@
     </div>
   </div>
 </div>
-<script>
-  new Vue({
-    el: '#numberApp',
-    data: function () {
-      // let clientHeight = Utils.getClientHeight()
 
-      return {
-        num: 1,
-        colorIndex: 0, // 默认选中0项商品
-        colorCategray: [],
-        orderParams: {},
-        goods: null,
-        errMessage: '',
-        errHeight: 'auto',
-        clientHeight: 0,
-      }
-    },
-    watch: {
-      clientHeight: function (n, o) {
-        console.log(o, n)
-        // this.errHeight = (this.clientHeight - document.getElementsByClassName('header')[0].offsetHeight - document.getElementsByClassName('footer')[0].offsetHeight) + 'px'
-        this.errHeight = document.getElementsByClassName('footer')[0].offsetHeight + 'px'
-      }
-    },
-    created(){
-      // 获取商品详情
-      this.getInfos()
-      this.clientHeight = Utils.getClientHeight()
-    },
-    mounted() {
-      let a = document.getElementsByClassName('footer')
-      let b = document.getElementsByClassName('header')
-      console.log(a)
-      console.log(a[0])
-      console.log(b)
-      const that = this
-      window.onresize = function () {
-        that.clientHeight = Utils.getClientHeight()
-      }
-
-      let params = new URLSearchParams(new URL(window.location.href).search.slice(1))
-      let id = params.get('id')
-
-      if (!id) {
-        this.$message({
-          type: 'error',
-          message: '参数有误',
-        })
-      }
-
-      axios({
-        url: '/goods/getDetail',
-        params: {
-          id: id
-        }
-      }).then(res => {
-        if (res.data.code) {
-          this.goods = res.data.data
-        } else {
-          this.errMessage = res.data.msg
-          // this.$message({
-          //   message: res.data.msg,
-          //   onClose: () => window.history.back()
-          // })
-        }
-      });
-    },
-    methods:{
-      changeColorCategray(item, index){
-        this.colorIndex = index
-        this.orderParams.id = item.id
-
-        axios({
-          url: '/goods/getSpecs',
-          params: {
-            specs: item,
-            id: this.goods.id,
-          }
-        }).then(res => {
-          if (res.data.code === 1) {
-            let specs = res.data.data
-            this.goods.total_stock = specs.stock
-            this.goods.market_price = specs.market_price
-            this.goods.integral = specs.integral
-          }
-        })
-      },
-      getInfos(){
-        this.colorCategray=[
-          {id: 1,title: '盈润款', color: '象牙白'},{id: 2,title: '盈润款', color: '象牙红'},{id: 3,title: '盈润款', color: '象牙黄'},{id: 4,title: '盈润款', color: '象牙绿'}
-        ]
-        this.colorIndex = this.colorCategray[0].id
-        this.orderParams.id = this.colorIndex
-      },
-      getSpecs() {
-        axios.get('/goods/getSpecs', { id: 1})
-      },
-      order() {
-        console.log(this.$refs.myRef)
-        console.log(this.num)
-        this.orderParams.num = this.num
-        console.log('this.orderParams', this.orderParams)
-        // todo 传商品id下单
-        // axios.post('https://www.baidu.com', {username: 'lqp', age: 18}).then(res => {
-        //     console.log(res)
-        // window.location.href = './order.html'
-
-        // }).catch(err => {
-        //     console.log(err)
-        // })
-      }
-    }
-  })
-</script>

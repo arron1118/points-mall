@@ -16,15 +16,9 @@
                       placeholder="请输入长度6-16位密码">
             </el-input>
           </el-form-item>
-          <el-form-item label="确认密码" prop="confirmpassword">
-            <el-input v-model.trim="stepFormOne.confirmpassword" type="text" show-password minlength="6" maxlength="16" placeholder="请输入确认密码">
+          <el-form-item label="确认密码" prop="confirm_password">
+            <el-input v-model.trim="stepFormOne.confirm_password" type="text" show-password minlength="6" maxlength="16" placeholder="请输入确认密码">
             </el-input>
-          </el-form-item>
-          <el-form-item label="短信验证" prop="code">
-            <div class="d-flex codebtn">
-              <el-input v-model.trim="stepFormOne.code"></el-input>
-              <el-button class="ms-2" @click="getCode">获取验证码</el-button>
-            </div>
           </el-form-item>
           <div class="">
             <el-button class="w-100 theme-btn4 mb-2 p-3" style="background-color:#FF2C49; color: #fff;"
@@ -35,98 +29,3 @@
     </div>
   </div>
 </div>
-
-<script>
-  new Vue({
-    el: '#registerApp',
-    data: function () {
-      var codeCheck = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请输入验证码'));
-        } else {
-          callback();
-        }
-      };
-      var validatePass1 = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请输入密码'));
-        } else if (value < 6) {
-          callback(new Error('请输入长度6-16位密码'));
-        } else {
-          callback();
-        }
-      };
-      var validatePass2 = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请再次输入密码'));
-        } else if (value !== this.stepFormOne.password) {
-          callback(new Error('两次输入密码不一致!'));
-        } else {
-          callback();
-        }
-      };
-      var checkPhone = (rule, value, callback) => {
-        if (!code(value)) {
-          callback(new Error('请输入正确的手机号!'));
-        } else {
-          callback();
-        }
-      };
-      var code = (phone) => {
-
-        let telVerify = /^1[3456789]{1}\d{9}$/;
-        // 验证是验证手机号码为11位，且以1开头。
-        return telVerify.test(phone)
-      }
-      return {
-        stepFormOne: {
-          phone: '',
-          password: '',
-          confirmpassword: '',
-          code: ''
-        },
-        stepFormOneRules: {
-          confirmpassword: [
-            { validator: validatePass2, trigger: 'blur' }
-          ],
-          phone: [
-            { validator: checkPhone, trigger: 'blur' }
-          ],
-          password: [
-            { validator: validatePass1, trigger: 'blur' }
-          ],
-          code: [
-            {validator: codeCheck, trigger: 'blur' }
-          ]
-        },
-      }
-    },
-    methods: {
-      // 提交
-      onSubmit(formName) {
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            console.log(this.stepFormOne)
-            // axios.post('https://www.baidu.com', {username: 'lqp', age: 18}).then(res => {
-            //     console.log(res)
-            // }).catch(err => {
-            //     console.log(err)
-            // })
-            // 成功后跳转
-            window.location.href = './registerSuccess.html'
-
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-        });
-      },
-      getCode(){
-        this.$message({
-          type: 'success',
-          message: '获取验证码成功!'
-        });
-      }
-    }
-  })
-</script>

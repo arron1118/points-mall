@@ -39,11 +39,7 @@ class Index extends CompanyController
      */
     public function editAdmin()
     {
-        $id = session('company.id');
-        $row = (new CompanyUsers())
-            ->withoutField('password')
-            ->find($id);
-        empty($row) && $this->error('用户信息不存在');
+        !$this->userInfo && $this->error('用户信息不存在');
         if ($this->request->isPost()) {
             $post = $this->request->post();
             $this->isDemo && $this->error('演示环境下不允许修改');
@@ -59,7 +55,7 @@ class Index extends CompanyController
             $save ? $this->success('保存成功') : $this->error('保存失败');
         }
         $this->assign([
-            'row' => $row,
+            'row' => $this->userInfo,
             'isSelfCompany' => (new CompanyUsers())->getisSelfCompanyList(),
         ]);
         return $this->fetch();
@@ -74,11 +70,7 @@ class Index extends CompanyController
      */
     public function editPassword()
     {
-        $id = session('company.id');
-        $row = (new CompanyUsers())
-            ->withoutField('password')
-            ->find($id);
-        if (!$row) {
+        if (!$this->userInfo) {
             $this->error('用户信息不存在');
         }
         if ($this->request->isPost()) {
@@ -94,7 +86,7 @@ class Index extends CompanyController
             }
 
             try {
-                $save = $row->save([
+                $save = $this->userInfo->save([
                     'password' => password($post['password']),
                 ]);
             } catch (\Exception $e) {
@@ -106,7 +98,7 @@ class Index extends CompanyController
                 $this->error('保存失败');
             }
         }
-        $this->assign('row', $row);
+        $this->assign('row', $this->userInfo);
         return $this->fetch();
     }
 

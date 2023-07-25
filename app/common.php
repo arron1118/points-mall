@@ -197,3 +197,10 @@ if (!function_exists('createToken')) {
     }
 }
 
+if (!function_exists('generateRandomString')) {
+    function generateRandomString ($length = 1) {
+        $bytes = openssl_random_pseudo_bytes($length);
+        return uniqid('hb_') . rtrim(strtr(base64_encode($bytes), '+/', '-_'), '=');
+    }
+}
+

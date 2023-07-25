@@ -49,6 +49,7 @@ class PortalController extends \app\BaseController
         $this->view = $this->app->view;
         $this->layout && $this->view->engine()->layout($this->layout);
 
+        $this->checkAuth();
         $this->viewInit();
     }
 
@@ -91,20 +92,20 @@ class PortalController extends \app\BaseController
      */
     private function checkAuth()
     {
-        $adminConfig = config('portal');
-        $currentController = parse_name(app()->request->controller());
-        $userToken = Cookie::get('points_mall_company_token');
+//        $adminConfig = config('portal');
+//        $currentController = parse_name(app()->request->controller());
+        $userToken = Cookie::get('points_mall_portal_token');
         $userToken && $this->userInfo = MemberUsers::where('token', $userToken)->findOrEmpty();
 
         // 验证登录
-        if (!in_array($currentController, $adminConfig['no_login_controller'])) {
-            empty($this->userInfo) && $this->error('请先登录后台', [], __url('company/login/index'));
-
-            // 判断是否登录过期
-            if (time() > $this->userInfo->token_expire_time) {
-                Cookie::delete('points_mall_company_token');
-                $this->error('登录已过期，请重新登录', [], __url('company/login/index'));
-            }
-        }
+//        if (!in_array($currentController, $adminConfig['no_login_controller'])) {
+//            empty($this->userInfo) && $this->error('请先登录后台', [], __url('/login'));
+//
+//            // 判断是否登录过期
+//            if (time() > $this->userInfo->token_expire_time) {
+//                Cookie::delete('points_mall_company_token');
+//                $this->error('登录已过期，请重新登录', [], __url('/login'));
+//            }
+//        }
     }
 }

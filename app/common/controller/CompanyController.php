@@ -195,7 +195,9 @@ class CompanyController extends BaseController
         $adminConfig = config('company');
         $currentController = parse_name(app()->request->controller());
         $userToken = Cookie::get('points_mall_company_token');
-        $userToken && $this->userInfo = CompanyUsers::where('token', $userToken)->findOrEmpty();
+        $userToken && $this->userInfo = CompanyUsers::where('token', $userToken)
+            ->withoutField('password')
+            ->findOrEmpty();
 
         // 验证登录
         if (!in_array($currentController, $adminConfig['no_login_controller'])) {

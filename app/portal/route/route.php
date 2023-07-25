@@ -19,8 +19,11 @@ Route::group('account', function () {
 });
 
 Route::get('login', 'Index/login');
+Route::post('doLogin', 'Index/doLogin');
 
 Route::get('register', 'Index/register');
+Route::post('doRegister', 'Index/doRegister');
+Route::get('registerSuccess', 'Index/registerSuccess');
 
 Route::get('detail/:id?', 'mall.goods/detail');
 
@@ -31,3 +34,10 @@ Route::group('goods', function () {
     Route::get('getSpecs', 'mall.goods/getSpecs');
 });
 
+Route::group('address', function () {
+    Route::get('getAddressList', 'member.Address/getAddressList');
+    Route::post('add', 'member.Address/add');
+    Route::post('edit', 'member.Address/edit');
+    Route::post('del', 'member.Address/del');
+    Route::post('setDefaultAddress', 'member.Address/setDefaultAddress');
+});

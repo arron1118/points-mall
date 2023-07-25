@@ -29,4 +29,45 @@ class User extends \app\common\controller\PortalController
         return $this->view->fetch();
     }
 
+    /**
+     * 修改密码
+     * @return string
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     */
+    public function resetPassword()
+    {
+        if (!$this->userInfo) {
+            $this->error('用户信息不存在');
+        }
+
+        if ($this->request->isPost()) {
+            $post = $this->request->post();
+            $rule = [
+                'password|登录密码'       => 'require',
+                'password_again|确认密码' => 'require',
+            ];
+            $this->validate($post, $rule);
+            if ($post['password'] != $post['password_again']) {
+                $this->error('两次密码输入不一致');
+            }
+
+            try {
+                $save = $this->userInfo->save([
+                    'password' => password($post['password']),
+                ]);
+            } catch (\Exception $e) {
+                $this->error('保存失败');
+            }
+            if ($save) {
+                $this->success('保存成功');
+            } else {
+                $this->error('保存失败');
+            }
+        }
+        $this->assign('row', $this->userInfo);
+        return $this->fetch();
+    }
+
 }
