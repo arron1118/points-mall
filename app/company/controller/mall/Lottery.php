@@ -44,7 +44,8 @@ class Lottery extends \app\common\controller\CompanyController
                 ->where($where)
                 ->page($page, $limit)
                 ->order($this->sort)
-                ->select();
+                ->select()
+                ->append(['start_time_text', 'end_time_text']);
             $data = [
                 'code'  => 0,
                 'msg'   => '',
@@ -77,8 +78,8 @@ class Lottery extends \app\common\controller\CompanyController
                     }
                 }
 
-                if (empty($prizes)) {
-                    $this->error('至少有填写一项奖项');
+                if (count($prizes) < 12) {
+                    $this->error('请设置12个奖项');
                 }
 
                 if ($post['range_date']) {
@@ -118,31 +119,32 @@ class Lottery extends \app\common\controller\CompanyController
             $post = $this->request->post();
             $rule = [];
             $this->validate($post, $rule);
-            try {
-                $prizes = [];
-                foreach ($post['prize_list'] as $key => $value) {
-                    if ($value['type'] === '') {
-                        unset($post['prize_list'][$key]);
-                    } else {
-                        // 新增
-                        if (!$value['id']) {
-                            unset($value['id']);
-                            $value['lottery_id'] = $id;
-                        }
-
-                        $prizes[] = $value;
+            $prizes = [];
+            foreach ($post['prize_list'] as $key => $value) {
+                if ($value['type'] === '') {
+                    unset($post['prize_list'][$key]);
+                } else {
+                    // 新增
+                    if (!$value['id']) {
+                        unset($value['id']);
+                        $value['lottery_id'] = $id;
                     }
-                }
 
-                if (empty($prizes)) {
-                    $this->error('至少有填写一项奖项');
+                    $prizes[] = $value;
                 }
+            }
 
-                if ($post['range_date']) {
-                    $range = explode(' - ', $post['range_date']);
-                    $post['start_time'] = strtotime($range[0]);
-                    $post['end_time'] = strtotime($range[1]);
-                }
+            if (count($prizes) < 12) {
+                $this->error('请设置12个奖项');
+            }
+
+            if ($post['range_date']) {
+                $range = explode(' - ', $post['range_date']);
+                $post['start_time'] = strtotime($range[0]);
+                $post['end_time'] = strtotime($range[1]);
+            }
+
+            try {
 
                 $save = $row->save($post);
 
@@ -156,7 +158,7 @@ class Lottery extends \app\common\controller\CompanyController
                     (new MallLotteryPrizes())->saveAll($prizes);
                 }
             } catch (\Exception $e) {
-                $this->error('保存失败');
+                $this->error('保存失败: ' . $e->getMessage());
             }
             $save ? $this->success('保存成功', $prizes) : $this->error('保存失败', $post);
         }

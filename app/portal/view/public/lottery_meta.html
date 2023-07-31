@@ -1,0 +1,33 @@
+
+<title>{:sysconfig('site','site_name')}</title>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<!--[if lt IE 9]>
+<script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+<script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+<script>
+    window.CONFIG = {
+        ADMIN: "{$adminModuleName|default='company'}",
+        CONTROLLER_JS_PATH: "{$thisControllerJsPath|default=''}",
+        ACTION: "{$thisAction|default=''}",
+        AUTOLOAD_JS: "{$autoloadJs|default='false'}",
+        VERSION: "{$version|default='1.0.0'}",
+        CSRF_TOKEN: "{:token()}",
+    };
+</script>
+<script src="__STATIC__/plugs/jquery/jquery.min.js"></script>
+<link rel="stylesheet" href="__STATIC__/plugs/bootstrap/css/bootstrap.min.css">
+<script src="__STATIC__/plugs/bootstrap/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="__STATIC__/portal/css/index.css">
+<link rel="stylesheet" href="__STATIC__/plugs/element-ui/index.css">
+<link rel="stylesheet" href="__STATIC__/plugs/element-ui/fonts/element-icons.ttf">
+<link rel="stylesheet" href="__STATIC__/plugs/element-ui/fonts/element-icons.woff">
+<!-- import Vue before Element -->
+<script src="__STATIC__/plugs/vue-2.7.14/vue.min.js"></script>
+<!-- import JavaScript -->
+<script src="__STATIC__/plugs/element-ui/index.js"></script>
+<script src="__STATIC__/plugs/axios/axios.min.js"></script>
+<script src="__STATIC__/common/js/Utils.js"></script>

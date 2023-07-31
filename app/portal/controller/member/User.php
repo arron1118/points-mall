@@ -8,9 +8,12 @@
 namespace app\portal\controller\member;
 
 use app\common\model\MemberUsers;
+use app\portal\middleware\Auth;
 
 class User extends \app\common\controller\PortalController
 {
+
+    protected $middleware = [Auth::class];
 
     protected function initialize()
     {
@@ -46,10 +49,10 @@ class User extends \app\common\controller\PortalController
             $post = $this->request->post();
             $rule = [
                 'password|登录密码'       => 'require',
-                'password_again|确认密码' => 'require',
+                'password_confirm|确认密码' => 'require',
             ];
             $this->validate($post, $rule);
-            if ($post['password'] != $post['password_again']) {
+            if ($post['password'] !== $post['password_confirm']) {
                 $this->error('两次密码输入不一致');
             }
 
@@ -58,16 +61,14 @@ class User extends \app\common\controller\PortalController
                     'password' => password($post['password']),
                 ]);
             } catch (\Exception $e) {
-                $this->error('保存失败');
+                $this->error('修改失败');
             }
             if ($save) {
-                $this->success('保存成功');
+                $this->success('修改成功');
             } else {
-                $this->error('保存失败');
+                $this->error('修改失败');
             }
         }
-        $this->assign('row', $this->userInfo);
-        return $this->fetch();
     }
 
 }

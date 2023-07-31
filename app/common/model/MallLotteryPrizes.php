@@ -28,6 +28,7 @@ class MallLotteryPrizes extends TimeModel
     public function getTypeList()
     {
         return [
+            0 => '谢谢参与',
             1 => '其他',
             2 => '积分',
             3 => '金额',

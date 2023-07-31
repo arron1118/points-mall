@@ -95,7 +95,7 @@ class PortalController extends \app\BaseController
 //        $adminConfig = config('portal');
 //        $currentController = parse_name(app()->request->controller());
         $userToken = Cookie::get('points_mall_portal_token');
-        $userToken && $this->userInfo = MemberUsers::where('token', $userToken)->findOrEmpty();
+        $userToken && $this->userInfo = MemberUsers::where('token', $userToken)->find();
 
         // 验证登录
 //        if (!in_array($currentController, $adminConfig['no_login_controller'])) {

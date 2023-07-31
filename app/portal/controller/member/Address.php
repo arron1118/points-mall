@@ -9,9 +9,12 @@ namespace app\portal\controller\member;
 
 use app\common\model\AnalysisRegion;
 use app\common\model\MemberAddress;
+use app\portal\middleware\Auth;
 
 class Address extends \app\common\controller\PortalController
 {
+
+    protected $middleware = [Auth::class];
 
     public function initialize()
     {
@@ -36,6 +39,7 @@ class Address extends \app\common\controller\PortalController
         $params['receiver_province'] = $region[0];
         $params['receiver_city'] = $region[1];
         $params['receiver_district'] = $region[2];
+        $params['user_id'] = $this->userInfo->id;
 
         $this->model->save($params) ? $this->success('添加成功') : $this->error('添加失败');
     }
@@ -80,7 +84,7 @@ class Address extends \app\common\controller\PortalController
 
     public function getAddressList()
     {
-        $list = $this->model->select();
+        $list = $this->model->where('user_id', $this->userInfo->id)->select();
 
         $this->success('success', $list->hidden(['user_id', 'remark', 'create_time', 'update_time', 'delete_time']));
     }

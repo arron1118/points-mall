@@ -36,11 +36,13 @@ define(["jquery", "easy-admin"], function ($, ea) {
                 cols: [[
                     {type: "checkbox"},
                     {field: 'id', width: 80, title: 'ID'},
+                    {field: 'img', minWidth: 80, title: '图片', search: false, templet: ea.table.image},
                     {field: 'title', minWidth: 80, title: '名称'},
                     {field: 'detail', minWidth: 80, title: '描述', search: false,},
-                    {field: 'start_time', minWidth: 80, title: '开始时间', search: false,},
-                    {field: 'end_time', minWidth: 80, title: '结束时间', search: false,},
+                    {field: 'start_time_text', minWidth: 80, title: '开始时间', search: false,},
+                    {field: 'end_time_text', minWidth: 80, title: '结束时间', search: false,},
                     {field: 'create_time', minWidth: 80, title: '创建时间', search: false,},
+                    {field: 'status', title: '状态', width: 85, selectList: {0: '下架', 1: '上架'}, templet: ea.table.switch},
                     {
                         width: 250,
                         title: '操作',
@@ -78,6 +80,12 @@ define(["jquery", "easy-admin"], function ($, ea) {
             form.on('select(select-type)', function (data) {
                 // 选择商品
                 $(data.elem).closest('tr').find('.select-goods').prop('disabled', parseInt(data.value) !== 4)
+
+                if (parseInt(data.value) === 0) {
+                    $(this).closest('tr').find('input.prize-title').val('谢谢参与').prop('disabled', true)
+                } else {
+                    $(this).closest('tr').find('input.prize-title').val('').prop('disabled', false)
+                }
             })
 
             $('.clear-prize-btn').on('click', function (e) {
@@ -106,6 +114,12 @@ define(["jquery", "easy-admin"], function ($, ea) {
             form.on('select(select-type)', function (data) {
                 // 选择商品
                 $(data.elem).closest('tr').find('.select-goods').prop('disabled', parseInt(data.value) !== 4)
+
+                if (parseInt(data.value) === 0) {
+                    $(this).closest('tr').find('input.prize-title').val('谢谢参与').prop('disabled', true)
+                } else {
+                    $(this).closest('tr').find('input.prize-title').val('').prop('disabled', false)
+                }
             })
 
             // 清空

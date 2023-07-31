@@ -1,18 +1,19 @@
 <div class="content container mb-5">
-  <div class="row justify-content-center">
-    <div class="col-lg-3 col-8">
-      <image style="width: 100%; height: auto;" src="__STATIC__/portal/imgs/c0.gif" fit="contain"></image>
+  <div id="drawApp">
+    <div class="row justify-content-center">
+      <div class="col-lg-3 col-8">
+        <image style="width: 100%; height: auto;" src="__STATIC__/portal/imgs/c0.gif" fit="contain"></image>
+      </div>
     </div>
-  </div>
-  <div class="row justify-content-center draw-bgi">
-    <div class="col-lg-6 col-12 p-0">
-      <div id="drawApp" v-if="prizes.length">
-        <div class="d-flex justify-content-center">
+    <div class="row justify-content-center draw-bgi">
+      <div class="col-lg-6 col-12 p-0">
+        <div class="d-flex justify-content-center" v-if="prizes.length">
           <div v-if="!isPhone">
             <lucky-grid ref="myLucky" :width="!isPhone?width:width" :height="!isPhone?height:height2"
                         :rows="rows" :cols="cols" :prizes="prizes"
-                        :blocks="blocks" @start="startCallback('myLucky')"
+                        :blocks="blocks" :buttons="buttons" @start="startCallback('myLucky')"
                         @end="endCallback" />
+            <div id="lucky-canvas"></div>
           </div>
           <div v-else>
             <lucky-grid ref="myLucky2" :width="width2" :height="height2" :rows="rows" :cols="cols"
@@ -44,7 +45,7 @@
                     </div>
                   </div>
                   <div class="theme-red pb-5" style="text-align: center; font-size: 25px;">
-                    <span>{{ draw.content }}</span><br /><span>获得{{ draw.prize }}！</span>
+                    <span>{{ draw.content }}</span><br /><span>{{ draw.prize }} </span>
                   </div>
                 </div>
                 <div class="text-center">
@@ -56,20 +57,13 @@
             </el-dialog>
           </div>
         </div>
-        <div class="d-flex justify-content-center mt-3">
-          <div style="width: 110px; height: 40px;">
-            <img src="__STATIC__/portal/imgs/buttons.png" class="layui-btn" @click="startCallback('myLucky')" style="width: 100%; cursor: pointer;" />
-          </div>
-        </div>
       </div>
     </div>
-  </div>
-  <div class="text-center theme-size20 mt-5 mb-4" style="color: #333;">活动规则</div>
-  <div class="theme-gray theme-size15 d-flex justify-content-center">
-    <div class="text-start">
-      <p>1、每天一次抽奖机会，每次抽奖需使用50积分</p>
-      <p>2、抽中奖可凭截图发送客服，并提供收货地址及联系人</p>
-      <p>3、抽中现金券，可直接到卡包种获取;</p>
+    <div class="text-center theme-size20 mt-5 mb-4" style="color: #333;">活动规则</div>
+    <div class="theme-gray theme-size15 d-flex justify-content-center">
+      <div class="text-start">
+        <div v-html="lottery.detail"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -87,14 +81,6 @@
         width: '100%',
         height: '100%'
       }
-      // 奖品
-      // const prizeImg =
-      // {
-      //     src: './imgs/71-63.gif',
-      //     width: '60%',
-      //     height: '60%',
-      //     top: '22%'
-      // }
       // 按钮
       const buttonsImg = {
         src: '/static/portal/imgs/buttons.png',
@@ -138,34 +124,38 @@
           }
         ],
         isPhone: false, // 判断设备
-        draw:{} // 转盘获奖信息
+        draw:{}, // 转盘获奖信息
+        lottery: {},
       }
     },
     created() {
       this.isPhone = this.IsPhone()
-      this.prizeItems()
+      this.getLottery().then(res => {
+        this.lottery = res.data.data
+        this.prizeItems()
+      })
     },
     methods: {
+      async getLottery() {
+        return await axios({
+          url: '/lottery/info',
+          params: {
+            id: 5
+          }
+        })
+      },
       prizeItems(){
-        var prizeImg = {
-          src: '/static/portal/imgs/71-63.gif',
-          width: '60%',
-          height: '60%',
-          top: '22%'
-        }
-
         let prizes = [],
                 rows = this.rows,
                 cols = this.cols;
-        console.log(this.buttons)
-        console.log(rows, cols)
+
         for (let i = 0; i < cols; i ++) {
           for (let j = 0; j < rows; j ++) {
             if (i < cols - 1) {
-              prizes.push({ x: i, y: j, range: i + j, imgs: [prizeImg], fonts: [{ text: '' + i + j, top: '20%', fontColor: 'red' }], background: '#fef0ef', shadow: '0px 10px 0px #ffc4b8' })
+              prizes.push({ x: i, y: j, imgs: [], fonts: [{ top: '20%', fontColor: 'red' }], background: '#fef0ef', shadow: '0px 10px 0px #ffc4b8' })
               break;
             } else if (j < rows - 1) {
-              prizes.push({ x: i, y: j, range: i + j, imgs: [prizeImg], fonts: [{ text: '' + i + j, top: '20%', fontColor: 'red' }], background: '#fef0ef', shadow: '0px 10px 0px #ffc4b8' })
+              prizes.push({ x: i, y: j, imgs: [], fonts: [{ top: '20%', fontColor: 'red' }], background: '#fef0ef', shadow: '0px 10px 0px #ffc4b8' })
             }
           }
         }
@@ -173,23 +163,47 @@
         for (let i = cols - 1; i >= 0; i --) {
           for (let j = rows - 1; j >= 0; j --) {
             if (i > 0) {
-              prizes.push({ x: i, y: j, range: i + j, imgs: [prizeImg], fonts: [{ text: '' + i + j, top: '20%', fontColor: 'red' }], background: '#fef0ef', shadow: '0px 10px 0px #ffc4b8' })
+              prizes.push({ x: i, y: j, imgs: [], fonts: [{ top: '20%', fontColor: 'red' }], background: '#fef0ef', shadow: '0px 10px 0px #ffc4b8' })
               break;
             } else if (j > 0) {
-              prizes.push({ x: i, y: j, range: i + j, imgs: [prizeImg], fonts: [{ text: '' + i + j, top: '20%', fontColor: 'red' }], background: '#fef0ef', shadow: '0px 10px 0px #ffc4b8' })
+              prizes.push({ x: i, y: j, imgs: [], fonts: [{ top: '20%', fontColor: 'red' }], background: '#fef0ef', shadow: '0px 10px 0px #ffc4b8' })
             }
           }
         }
-
+        prizes.forEach((v, i) => {
+          if (this.lottery.lotteryPrizes[i]) {
+            prizes[i].range = this.lottery.lotteryPrizes[i].probability
+            prizes[i].fonts[0].text = this.lottery.lotteryPrizes[i].title
+            prizes[i].lottery_info = this.lottery.lotteryPrizes[i]
+            prizes[i].imgs.push({
+              src: this.lottery.lotteryPrizes[i].img,
+              activeSrc: this.lottery.lotteryPrizes[i].img,
+              width: '60%',
+              height: '60%',
+              top: '22%'
+            })
+          } else {
+            prizes[i].fonts[0].text = '谢谢参与'
+            prizes[i].range = 10
+            prizes[i].type = 1
+            prizes[i].lottery_id = 0
+            prizes[i].amount = this.lottery.lotteryPrizes[i].amount
+            prizes[i].imgs.push({
+              src: '/static/portal/imgs/71-63.gif',
+              width: '60%',
+              height: '60%',
+              top: '22%'
+            })
+          }
+        })
         this.prizes = prizes
-        console.log('prizes', this.prizes)
+
       },
       getPrize(){
         this.dialogTableVisible = false
       },
       IsPhone() {
         var info = navigator.userAgent;
-        console.log('userAgent', info)
         //通过正则表达式的test方法判断是否包含“Mobile”字符串
         var isPhone = /mobile/i.test(info);
         //如果包含“Mobile”（是手机设备）则返回true
@@ -197,7 +211,6 @@
       },
       // 点击抽奖按钮会触发star回调
       startCallback(value) {
-        console.log(this)
         if (value == 'myLucky2') {
           // 调用抽奖组件的play方法开始游戏
           this.$refs.myLucky2.play()
@@ -224,22 +237,33 @@
       },
       // 抽奖结束会触发end回调
       endCallback(prize) {
-        console.log(prize)
+        if (prize.type === 0) {
+          this.draw = {
+            title: '很遗憾！',
+            url: '/static/portal/imgs/none.png',
+            content: '',
+            prize: prize.fonts[0].text,
+            btn: '确定'
+          }
+        } else {
+          this.draw = {
+            title: '中奖啦！',
+            url: prize.imgs[0].src,
+            content: '',
+            prize: prize.fonts[0].text + (prize.lottery_info.amount &&  (' + ' + prize.lottery_info.amount)),
+            btn: '立即领取'
+          }
+        }
+
         this.dialogTableVisible = true
-        this.draw2 = {
-          title: '很遗憾！',
-          url: '/static/portal/imgs/none.png',
-          content: '很遗憾，',
-          prize: '未中奖，再试一次吧？',
-          btn: '谢谢参与'
-        }
-        this.draw = {
-          title: '中奖啦！',
-          url: prize.imgs[0].src, // './imgs/draw-product.png'
-          content: '恭喜你，',
-          prize: prize.fonts[0].text, // '获得applewatch一台！'
-          btn: '立即领取'
-        }
+
+        axios({
+          url: 'lottery/receiveLottery',
+          params: prize.lottery_info,
+          method: 'post',
+        }).then(res => {
+          console.log(res)
+        })
       },
 
     }

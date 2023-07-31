@@ -9,13 +9,18 @@ use think\facade\Route;
 
 //Route::miss('/');
 
-Route::get('lottery', 'mall.lottery/index');
+Route::group('lottery', function () {
+    Route::get('/', 'mall.lottery/index');
+    Route::get('info', 'mall.lottery/info');
+    Route::post('receiveLottery', 'mall.lottery/receiveLottery');
+});
 
 Route::group('account', function () {
     Route::get('/', 'member.user/index');
     Route::get('order', 'member.order/index');
     Route::get('address', 'member.address/index');
     Route::get('password', 'member.user/password');
+    Route::post('resetPassword', 'member.user/resetPassword');
 });
 
 Route::get('login', 'Index/login');

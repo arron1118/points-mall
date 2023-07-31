@@ -10,6 +10,11 @@ namespace app\common\model;
 class MemberLotteryPrizes extends TimeModel
 {
 
+    protected $json = [
+        'lottery_detail',
+        'prize_detail',
+    ];
+
     public function lottery()
     {
         return $this->belongsTo(MallLottery::class, 'lottery_id', 'id');

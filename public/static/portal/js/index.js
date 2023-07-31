@@ -66,11 +66,14 @@ define((function ($, window) {
                                         messages.onClose = () => window.location.href = '/index.html'
                                     } else {
                                         messages.type = 'warning'
+                                        this.getCaptcha()
                                     }
 
                                     this.$message(messages)
                                 }).catch(err => {
                                     console.log(err)
+                                    this.$message(err.response.data.message)
+                                    this.getCaptcha()
                                 })
 
                             } else {
