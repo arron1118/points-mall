@@ -11,9 +11,12 @@ use app\common\controller\PortalController;
 use app\common\model\MallGoods;
 use app\common\model\MallGoodsSpecs;
 use app\common\model\MallOrders;
+use app\portal\middleware\Auth;
 
 class Orders extends PortalController
 {
+
+    protected $middleware = [Auth::class];
 
     protected function initialize()
     {
