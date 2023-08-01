@@ -7,6 +7,7 @@
 
 namespace app\portal\controller\member;
 
+use app\common\model\MemberIntegralLogs;
 use app\common\model\MemberUsers;
 use app\portal\middleware\Auth;
 
@@ -24,6 +25,10 @@ class User extends \app\common\controller\PortalController
 
     public function index()
     {
+        $integralLogs = MemberIntegralLogs::order('id desc')->select();
+        $this->view->assign([
+            'logs' => $integralLogs,
+        ]);
         return $this->view->fetch();
     }
 

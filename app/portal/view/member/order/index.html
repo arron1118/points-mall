@@ -60,12 +60,21 @@
         }]
       }
     },
+    created () {
+      this.getOrderList()
+    },
     methods: {
-
-
-
-
-
+      getOrderList: function () {
+        axios({
+          url: '/account/getOrderList',
+        }).then(res => {
+          if (res.data.code === 1) {
+            this.tableData = res.data.data
+          } else {
+            this.$message(res.data.msg)
+          }
+        })
+      }
     }
   })
 </script>

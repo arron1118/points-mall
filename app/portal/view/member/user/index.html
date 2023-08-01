@@ -6,46 +6,23 @@
                 <div class="col-lg-6">
                     <div class="d-flex flex-wrap align-items-center mt-lg-0 mt-4">
                         <img src="__STATIC__/portal/imgs/2.png" class="me-3" style="width: 49px; height: 49px;border-radius: 50%;" />
-                        <div class="theme-size20">账户名称：<span>黄嘉琪</span></div>
+                        <div class="theme-size20"><span>{$userInfo.username}</span></div>
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    <div class="theme-size15 text-lg-end text-start mt-lg-0 mt-4">积分余额：<span>2151254分</span></div>
+                    <div class="theme-size15 text-lg-end text-start mt-lg-0 mt-4">积分：<span>{$userInfo.integral}</span></div>
                 </div>
             </div>
             <div>
                 <div class="theme-size20 border p-3">积分收支明细</div>
                 <!-- 循环列表 -->
+                {foreach $logs as $val}
                 <div
                         class="d-flex justify-content-between align-items-center theme-size15 theme-second border border-top-0 p-3">
-                    <div>兑换Mistine(烈儿宝贝直播间]小蓝盾粉底液混油皮控油保湿遮瑕粉底-1000</div>
-                    <div>2023-05-05</div>
+                    <div>{$val.title} {$val.type === 1 ? '-' : '+'} {$val.integral_amount}</div>
+                    <div>{$val.create_time}</div>
                 </div>
-                <div
-                        class="d-flex justify-content-between align-items-center theme-size15 theme-second border border-top-0 p-3">
-                    <div>兑换Mistine(烈儿宝贝直播间]小蓝盾粉底液混油皮控油保湿遮瑕粉底-1000</div>
-                    <div>2023-05-05</div>
-                </div>
-                <div
-                        class="d-flex justify-content-between align-items-center theme-size15 theme-second border border-top-0 p-3">
-                    <div>兑换Mistine(烈儿宝贝直播间]小蓝盾粉底液混油皮控油保湿遮瑕粉底-1000</div>
-                    <div>2023-05-05</div>
-                </div>
-                <div
-                        class="d-flex justify-content-between align-items-center theme-size15 theme-second border border-top-0 p-3">
-                    <div>兑换Mistine(烈儿宝贝直播间]小蓝盾粉底液混油皮控油保湿遮瑕粉底-1000</div>
-                    <div>2023-05-05</div>
-                </div>
-                <div
-                        class="d-flex justify-content-between align-items-center theme-size15 theme-second border border-top-0 p-3">
-                    <div>兑换Mistine(烈儿宝贝直播间]小蓝盾粉底液混油皮控油保湿遮瑕粉底-1000</div>
-                    <div>2023-05-05</div>
-                </div>
-                <div
-                        class="d-flex justify-content-between align-items-center theme-size15 theme-second border border-top-0 p-3">
-                    <div>兑换Mistine(烈儿宝贝直播间]小蓝盾粉底液混油皮控油保湿遮瑕粉底-1000</div>
-                    <div>2023-05-05</div>
-                </div>
+                {/foreach}
             </div>
         </div>
     </div>

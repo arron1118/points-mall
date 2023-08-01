@@ -21,7 +21,7 @@ class MallGoodsSpecs extends TimeModel
         return $this->belongsTo(MallGoods::class, 'goods_id', 'id');
     }
 
-    public function order_items()
+    public function orderItems()
     {
         return $this->belongsTo(MallOrderItems::class, 'goods_specs_id', 'id');
     }

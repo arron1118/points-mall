@@ -17,7 +17,8 @@ Route::group('lottery', function () {
 
 Route::group('account', function () {
     Route::get('/', 'member.user/index');
-    Route::get('order', 'member.order/index');
+    Route::get('order', 'member.orders/index');
+    Route::get('getOrderList', 'member.orders/getOrderList');
     Route::get('address', 'member.address/index');
     Route::get('password', 'member.user/password');
     Route::post('resetPassword', 'member.user/resetPassword');
@@ -37,6 +38,11 @@ Route::get('error', 'Error/index');
 Route::group('goods', function () {
     Route::get('getDetail', 'mall.goods/getDetail');
     Route::get('getSpecs', 'mall.goods/getSpecs');
+});
+
+Route::group('order', function () {
+    Route::get('/', 'mall.orders/index');
+    Route::post('getGoodsDetail', 'mall.orders/getGoodsDetail');
 });
 
 Route::group('address', function () {

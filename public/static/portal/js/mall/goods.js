@@ -25,7 +25,6 @@ define((function ($, window) {
         },
         created(){
             // 获取商品详情
-            this.getInfos()
             this.clientHeight = Utils.getClientHeight()
         },
         mounted() {
@@ -78,34 +77,13 @@ define((function ($, window) {
                     this.goodsSpecs = null
                 }
             },
-            getInfos(){
-                // this.colorCategray=[
-                //     {id: 1,title: '盈润款', color: '象牙白'},{id: 2,title: '盈润款', color: '象牙红'},{id: 3,title: '盈润款', color: '象牙黄'},{id: 4,title: '盈润款', color: '象牙绿'}
-                // ]
-                // this.colorIndex = this.colorCategray[0].id
-                // this.orderParams.id = this.colorIndex
-            },
-            getSpecs() {
-                axios.get('/goods/getSpecs', { id: 1})
-            },
             order() {
+                let params = {}
                 if (this.goods.attribute_list && !this.goodsSpecs) {
-                    this.$message('请选择分类')
+                    this.$message('请选择分类');
                 }
-                console.log(this.$refs.myRef);
-                console.log(this.num)
-                console.log(this.goodsSpecs)
-                this.orderParams.num = this.num
-                console.log('this.orderParams', this.orderParams)
 
-                // todo 传商品id下单
-                // axios.post('https://www.baidu.com', {username: 'lqp', age: 18}).then(res => {
-                //     console.log(res)
-                // window.location.href = './order.html'
-
-                // }).catch(err => {
-                //     console.log(err)
-                // })
+                window.location.href = '/order.html?goods_id=' + this.goods.id + '&goods_specs_id=' + this.goodsSpecs.id + '&quantity=' + this.num
             }
         }
     })

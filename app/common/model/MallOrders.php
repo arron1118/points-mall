@@ -20,12 +20,12 @@ class MallOrders extends TimeModel
         return $this->belongsTo(CompanyUsers::class, 'company_id', 'id');
     }
 
-    public function order_items()
+    public function orderItems()
     {
         return $this->hasMany(MallOrderItems::class, 'order_no', 'order_no');
     }
 
-    public function order_payment()
+    public function orderPayment()
     {
         return $this->hasMany(MallOrderPayment::class, 'order_no', 'order_no');
     }

@@ -10,7 +10,7 @@ namespace app\portal\controller\member;
 use app\common\model\MallOrders;
 use app\portal\middleware\Auth;
 
-class Order extends \app\common\controller\PortalController
+class Orders extends \app\common\controller\PortalController
 {
 
     protected $middleware = [Auth::class];
@@ -25,5 +25,19 @@ class Order extends \app\common\controller\PortalController
     public function index()
     {
         return $this->view->fetch();
+    }
+
+    public function getOrderList()
+    {
+        if ($this->request->isGet()) {
+            $list = $this->model->with(['orderItems'])
+                ->where([
+                'user_id' => $this->userInfo->id,
+            ])->order('id desc')->select();
+
+            $this->success('success', $list);
+        }
+
+        $this->error('参数错误');
     }
 }

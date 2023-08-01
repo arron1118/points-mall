@@ -15,4 +15,9 @@ class MallOrderPayment extends TimeModel
         return $this->belongsTo(MemberUsers::class, 'user_id', 'id');
     }
 
+    public function orders()
+    {
+        return $this->belongsTo(MallOrders::class, 'order_no', 'order_no');
+    }
+
 }

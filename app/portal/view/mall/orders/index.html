@@ -37,8 +37,26 @@
             <div @click="edit(scope.row)" class="a-hover ms-4">修改地址</div>
           </template>
         </el-table-column>
-
       </el-table>
+      <div class="row justify-content-between align-items-center theme-size15 my-4">
+        <div class="col-lg-6 col-12">
+          <div class="d-flex align-items-center flex-wrap">
+            <div class="me-4 ms-3">
+              收货地址
+            </div>
+            <el-dropdown @command="handleCommand">
+              <span class="el-dropdown-link">
+                {{ default_address }}<i class="el-icon-arrow-down el-icon--right"></i>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item :command="item" v-for="(item, index) in address">
+                  {{ item.address }}
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </div>
+        </div>
+      </div>
       <div class="row justify-content-between align-items-center theme-size15 my-4">
         <div class="col-lg-6 col-12">
           <div class="d-flex align-items-center flex-wrap">
@@ -51,8 +69,7 @@
 
         </div>
         <div class="col-lg-6 col-12">
-          <div
-                  class="d-flex align-items-center justify-content-lg-end justify-content-start flex-wrap my-lg-0 my-4">
+          <div class="d-flex align-items-center justify-content-lg-end justify-content-start flex-wrap my-lg-0 my-4">
             <span>已选商品<span class="theme-red">1</span>件</span>
             <span class="mx-4">积分支付：<span class="theme-red">¥ 1000.00</span></span>
             <span class="theme-btn1 mt-lg-0 mt-4" @click="order">结算</span>
@@ -112,7 +129,10 @@
         },
         tableData: [],
         multipleSelection: [],
-        allchecked: false
+        allchecked: false,
+        address: [],
+        goods: {},
+        default_address: '',
       }
     },
     created(){
@@ -120,30 +140,21 @@
     },
     methods: {
       getList(){
-        // axios.post('https://www.baidu.com', {username: 'lqp', age: 18}).then(res => {
-        //     console.log(res)
-        this.tableData = [
-          {
-            id: 1,
-            url: '/static/portal/imgs/1.png',
-            date: '2016-05-02',
-            name: '王小虎',
-            num: 1,
-            address: '上海市普陀区金沙江路 1518 弄'
-          }, {
-            id: 2,
-            url: '/static/portal/imgs/1.png',
-            date: '2016-05-04',
-            name: '王小虎',
-            num: 1,
-            address: '上海市普陀区金沙江路 1517 弄'
+        const url = new URL(window.location.href)
+        console.log(['绿色', '黄色'].join(','))
+        axios.post('/order/getGoodsDetail', url.searchParams).then(res => {
+            console.log(res)
+          if (res.data.code === 1) {
+            this.goods = res.data.data.goods
+            this.address = res.data.data.address
+            this.default_address = res.data.data.default_address
           }
-        ]
-
-        // }).catch(err => {
-        //     console.log(err)
-        // })
-
+        }).catch(err => {
+            console.log(err)
+        })
+      },
+      handleCommand(command) {
+        this.$message('click on item ' + command);
       },
       toggleSelection(rows) {
         console.log('99', rows)
