@@ -1,95 +1,90 @@
 <div class="content container my-5">
-  <div class="theme-size15">首页 > 我的订单</div>
-  <div class="my-5 border-bottom" id="tableApp">
-    <template>
-      <el-table ref="multipleTable" border :data="tableData" tooltip-effect="dark" style="width: 100%"
-                @selection-change="handleSelectionChange">
+  <div class="theme-size15 mb-3">首页 > 我的订单</div>
+  <div  id="tableApp">
+    <div class="mb-5 border-bottom" v-if="tableData.length > 0">
+      <template>
+        <el-table ref="multipleTable" border :data="tableData" tooltip-effect="dark" style="width: 100%"
+                  @selection-change="handleSelectionChange">
 
-        <el-table-column type="selection" width="55">
-        </el-table-column>
+          <el-table-column type="selection" label="全选" width="55">
+          </el-table-column>
 
-        <el-table-column label="全选" width="180">
-          <template slot-scope="scope">
-            <el-avatar shape="square" :size="100" fit="contain" :src="scope.row.url"></el-avatar>
-          </template>
-        </el-table-column>
-        <el-table-column label="商品信息" width="120">
-          <template slot-scope="scope">{{ scope.row.date }}</template>
-        </el-table-column>
-        <el-table-column prop="name" label="规格" align="center" width="120">
-        </el-table-column>
-        <el-table-column prop="address" label="数量" align="center" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <el-input-number v-model="scope.row.num" :min="1" size="mini"></el-input-number>
-          </template>
-        </el-table-column>
-        <el-table-column prop="address" label="积分" align="center" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <span class="theme-red">{{ scope.row.date }}</span>
-          </template>
-        </el-table-column>
-        <el-table-column label="默认地址" align="center" width="120">
-          <template slot-scope="scope">{{ scope.row.date }}</template>
-        </el-table-column>
-        <el-table-column label="操作" align="center" width="180">
-          <template slot-scope="scope">
-            <div @click="del(scope.row)" class="a-hover">删除</div>
-            <div @click="edit(scope.row)" class="a-hover ms-4">修改地址</div>
-          </template>
-        </el-table-column>
-      </el-table>
-      <div class="row justify-content-between align-items-center theme-size15 my-4">
-        <div class="col-lg-6 col-12">
-          <div class="d-flex align-items-center flex-wrap">
-            <div class="me-4 ms-3">
-              收货地址
-            </div>
-            <el-dropdown @command="handleCommand">
+          <el-table-column label="图片" width="180">
+            <template slot-scope="scope">
+              <el-avatar shape="square" :size="80" fit="contain" :src="scope.row.logo"></el-avatar>
+            </template>
+          </el-table-column>
+          <el-table-column label="商品信息">
+            <template slot-scope="scope">{{ scope.row.title }}</template>
+          </el-table-column>
+          <el-table-column prop="name" label="规格" align="center" width="120">
+            <template slot-scope="scope">{{ scope.row.goodsSpecs[0].specs_list.join(',') }}</template>
+          </el-table-column>
+          <el-table-column prop="address" label="数量" align="center" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <el-input-number v-model="quantity" :min="1" size="mini"></el-input-number>
+            </template>
+          </el-table-column>
+          <el-table-column prop="address" label="积分" align="center" show-overflow-tooltip>
+            <template slot-scope="scope">
+              <span class="theme-red">{{ scope.row.goodsSpecs[0].integral }}</span>
+            </template>
+          </el-table-column>
+        </el-table>
+        <div class="row justify-content-between align-items-center theme-size15 my-4">
+          <div class="col-lg-6 col-12">
+            <div class="d-flex align-items-center flex-wrap">
+              <div class="me-4 ms-3">
+                收货地址
+              </div>
+              <el-dropdown @command="handleCommand">
               <span class="el-dropdown-link">
-                {{ default_address }}<i class="el-icon-arrow-down el-icon--right"></i>
+                {{ select_address }}<i class="el-icon-arrow-down el-icon--right"></i>
               </span>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item :command="item" v-for="(item, index) in address">
-                  {{ item.address }}
-                </el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-          </div>
-        </div>
-      </div>
-      <div class="row justify-content-between align-items-center theme-size15 my-4">
-        <div class="col-lg-6 col-12">
-          <div class="d-flex align-items-center flex-wrap">
-            <div class="me-4 ms-3">
-              <el-checkbox v-model="allchecked" @change="toggleSelection(tableData)" class="me-3">
-              </el-checkbox>全选
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item :command="item" v-for="(item, index) in address">
+                    {{ item }}
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
             </div>
-            <span @click="delAll()" class="theme-red a-hover">删除选中商品</span>
           </div>
+        </div>
+        <div class="row justify-content-between align-items-center theme-size15 my-4">
+          <div class="col-lg-6 col-12">
+            <div class="d-flex align-items-center flex-wrap">
+              <div class="me-4 ms-3">
+                <el-checkbox v-model="allchecked" @change="toggleSelection(tableData)" class="me-3">
+                </el-checkbox>全选
+              </div>
+              <span @click="delAll()" class="theme-red a-hover">删除选中商品</span>
+            </div>
 
-        </div>
-        <div class="col-lg-6 col-12">
-          <div class="d-flex align-items-center justify-content-lg-end justify-content-start flex-wrap my-lg-0 my-4">
-            <span>已选商品<span class="theme-red">1</span>件</span>
-            <span class="mx-4">积分支付：<span class="theme-red">¥ 1000.00</span></span>
-            <span class="theme-btn1 mt-lg-0 mt-4" @click="order">结算</span>
+          </div>
+          <div class="col-lg-6 col-12">
+            <div class="d-flex align-items-center justify-content-lg-end justify-content-start flex-wrap my-lg-0 my-4">
+              <span>已选商品<span class="theme-red">1</span>件</span>
+              <span class="mx-4">积分支付：<span class="theme-red">¥ 1000.00</span></span>
+              <span class="theme-btn1 mt-lg-0 mt-4" @click="order">结算</span>
+            </div>
           </div>
         </div>
-      </div>
-    </template>
-    <!-- 弹框修改地址 -->
-    <el-dialog title="编辑" :visible.sync="dialogFormVisible">
-      <el-form :model="form">
-        <el-form-item label="收货地址" :label-width="'80'">
-          <el-input v-model.trim="form.address"></el-input>
-        </el-form-item>
-      </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="editSubmit">确 定</el-button>
-      </div>
-    </el-dialog>
+      </template>
+      <!-- 弹框修改地址 -->
+      <el-dialog title="编辑" :visible.sync="dialogFormVisible">
+        <el-form :model="form">
+          <el-form-item label="收货地址" :label-width="'80'">
+            <el-input v-model.trim="form.address"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">取 消</el-button>
+          <el-button type="primary" @click="editSubmit">确 定</el-button>
+        </div>
+      </el-dialog>
+    </div>
   </div>
+
   <div class="row g-4">
     <div class="col-lg-3 col-6">
       <div class="d-flex align-items-center">
@@ -132,33 +127,43 @@
         allchecked: false,
         address: [],
         goods: {},
-        default_address: '',
+        select_address: '',
+        quantity: 1,
       }
     },
     created(){
       this.getList()
     },
+    mounted() {
+      if (this.tableData.length) {
+        this.tableData.forEach(row => {
+          console.log(this.$refs)
+          this.$refs.multipleTable.toggleRowSelection(row, true)
+        })
+      }
+    },
     methods: {
       getList(){
         const url = new URL(window.location.href)
-        console.log(['绿色', '黄色'].join(','))
         axios.post('/order/getGoodsDetail', url.searchParams).then(res => {
-            console.log(res)
           if (res.data.code === 1) {
+            this.tableData.push(res.data.data.goods)
             this.goods = res.data.data.goods
             this.address = res.data.data.address
-            this.default_address = res.data.data.default_address
+            this.select_address = res.data.data.default_address
+            this.quantity = res.data.data.quantity
           }
         }).catch(err => {
             console.log(err)
         })
       },
       handleCommand(command) {
-        this.$message('click on item ' + command);
+        this.select_address = command
       },
       toggleSelection(rows) {
         console.log('99', rows)
         if (rows) {
+          console.log(this)
           rows.forEach(row => {
             this.$refs.multipleTable.toggleRowSelection(row);
           });

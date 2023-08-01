@@ -48,11 +48,9 @@ class Orders extends PortalController
         $address = [];
         $default_address = '';
         foreach ($this->userInfo->address as $val) {
-            $add = $val['receiver_province'] . $val['receiver_city'] . $val['receiver_district'] . $val['receiver_address'];
-            $address[] = [
-                'is_default' => $val['is_default'],
-                'address' => $add,
-            ];
+            $add = $val['receiver_province'] . $val['receiver_city'] . $val['receiver_district'] . $val['receiver_address']
+            . ' ' . $val['receiver_phone'] . ' ' . $val['receiver_name'];
+            $address[] = $add;
 
             if ($val['is_default'] === 1) {
                 $default_address = $add;
