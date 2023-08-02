@@ -6,15 +6,12 @@
         <el-table ref="multipleTable" border :data="tableData" tooltip-effect="dark" style="width: 100%"
                   @selection-change="handleSelectionChange">
 
-          <el-table-column type="selection" label="全选" width="55">
-          </el-table-column>
-
-          <el-table-column label="图片" width="180">
+          <el-table-column label="图片" width="180" align="center">
             <template slot-scope="scope">
               <el-avatar shape="square" :size="80" fit="contain" :src="scope.row.logo"></el-avatar>
             </template>
           </el-table-column>
-          <el-table-column label="商品信息">
+          <el-table-column label="商品信息" align="center">
             <template slot-scope="scope">{{ scope.row.title }}</template>
           </el-table-column>
           <el-table-column prop="name" label="规格" align="center" width="120">
@@ -50,38 +47,16 @@
             </div>
           </div>
         </div>
-        <div class="row justify-content-between align-items-center theme-size15 my-4">
+        <div class="row justify-content-end theme-size15 my-4">
           <div class="col-lg-6 col-12">
-            <div class="d-flex align-items-center flex-wrap">
-              <div class="me-4 ms-3">
-                <el-checkbox v-model="allchecked" @change="toggleSelection(tableData)" class="me-3">
-                </el-checkbox>全选
-              </div>
-              <span @click="delAll()" class="theme-red a-hover">删除选中商品</span>
-            </div>
-
-          </div>
-          <div class="col-lg-6 col-12">
-            <div class="d-flex align-items-center justify-content-lg-end justify-content-start flex-wrap my-lg-0 my-4">
+            <div class="d-flex align-items-center justify-content-end flex-wrap my-lg-0 my-4">
               <span>已选商品<span class="theme-red">1</span>件</span>
-              <span class="mx-4">积分支付：<span class="theme-red">¥ 1000.00</span></span>
-              <span class="theme-btn1 mt-lg-0 mt-4" @click="order">结算</span>
+              <span class="mx-4">积分支付：<span class="theme-red">{{ total_fee }}</span></span>
+              <span class="theme-btn1 mt-lg-0" @click="order">结算</span>
             </div>
           </div>
         </div>
       </template>
-      <!-- 弹框修改地址 -->
-      <el-dialog title="编辑" :visible.sync="dialogFormVisible">
-        <el-form :model="form">
-          <el-form-item label="收货地址" :label-width="'80'">
-            <el-input v-model.trim="form.address"></el-input>
-          </el-form-item>
-        </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="dialogFormVisible = false">取 消</el-button>
-          <el-button type="primary" @click="editSubmit">确 定</el-button>
-        </div>
-      </el-dialog>
     </div>
   </div>
 
@@ -129,18 +104,23 @@
         goods: {},
         select_address: '',
         quantity: 1,
+        total_fee: 0,
       }
+    },
+    watch: {
+      tableData: function (n, o) {
+        this.tableData.forEach(row => {
+          console.log(row)
+          if (row.goodsSpecs.length > 0) {
+            this.total_fee += row.goodsSpecs[0].integral * this.quantity
+          } else {
+            this.total_fee += row.integral * this.quantity
+          }
+        })
+      },
     },
     created(){
       this.getList()
-    },
-    mounted() {
-      if (this.tableData.length) {
-        this.tableData.forEach(row => {
-          console.log(this.$refs)
-          this.$refs.multipleTable.toggleRowSelection(row, true)
-        })
-      }
     },
     methods: {
       getList(){
@@ -159,58 +139,6 @@
       },
       handleCommand(command) {
         this.select_address = command
-      },
-      toggleSelection(rows) {
-        console.log('99', rows)
-        if (rows) {
-          console.log(this)
-          rows.forEach(row => {
-            this.$refs.multipleTable.toggleRowSelection(row);
-          });
-        } else {
-          this.$refs.multipleTable.clearSelection();
-        }
-      },
-      delAll() {
-        console.log(this.multipleSelection)
-        if (!this.multipleSelection.length) {
-          this.$message({
-            message: '请选择需要删除的数据！',
-            type: 'warning'
-          });
-        } else {
-
-          this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
-            });
-          }).catch(() => {
-
-          });
-        }
-      },
-      del(v) {
-        console.log(v)
-        this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
-        }).catch(() => {
-
-        });
-      },
-      edit(v) {
-        this.dialogFormVisible = true
       },
       order() {
         console.log(this.multipleSelection)
@@ -231,17 +159,6 @@
           // })
         }
 
-      },
-      editSubmit() {
-        this.dialogFormVisible = false
-        console.log(this.form)
-        // todo 提交后刷新表格
-        // axios.post('https://www.baidu.com', {username: 'lqp', age: 18}).then(res => {
-        //     console.log(res)
-        this.getList()
-        // }).catch(err => {
-        //     console.log(err)
-        // })
       },
       handleSelectionChange(val) {
         this.multipleSelection = val;

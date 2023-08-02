@@ -86,7 +86,7 @@ class Goods extends CompanyController
             $rule = [];
             $this->validate($post, $rule);
             try {
-                $post['company_id'] = session('company.id');
+                $post['company_id'] = $this->userInfo->id;
                 $save = $this->model->save($post);
 
                 if ($save && isset($post['attribute_list'])) {

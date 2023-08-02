@@ -54,9 +54,12 @@ class UploadfileService
      */
     protected $completeFileUrl;
 
-    public function __construct($file)
+    protected $userModel;
+
+    public function __construct($file, $userModel = null)
     {
         $this->file = $file;
+        $this->userModel = $userModel;
     }
 
     public function upload()
@@ -99,7 +102,7 @@ class UploadfileService
                 // 保存上传记录
                 $attachment = new AttachmentModel();
                 $attachment->admin_id = session('admin.id') ?? 0;
-                $attachment->company_id = session('company.id') ?? 0;
+                $attachment->company_id = $this->userModel->id ?? 0;
                 $attachment->url = $this->completeFileUrl;
                 $attachment->mime_type = $this->file->getOriginalMime();
                 $attachment->file_ext = $this->file->getOriginalExtension();

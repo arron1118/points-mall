@@ -32,7 +32,7 @@ class Ajax extends CompanyController
      */
     public function initAdmin()
     {
-        $cacheData = Cache::get('initCompany_' . session('company.id'));
+        $cacheData = Cache::get('initCompany_' . $this->userInfo->id);
         if (!empty($cacheData)) {
             return json($cacheData);
         }
@@ -46,7 +46,7 @@ class Ajax extends CompanyController
             'homeInfo' => $menuService->getHomeInfo(),
             'menuInfo' => $menuService->getMenuTree(),
         ];
-        Cache::tag('initCompany')->set('initCompany_' . session('company.id'), $data);
+        Cache::tag('initCompany')->set('initCompany_' . $this->userInfo->id, $data);
         return json($data);
     }
 
@@ -77,7 +77,7 @@ class Ajax extends CompanyController
         ];
         $this->validate($data, $rule);
         try {
-            $upload = (new UploadfileService($data['file']))
+            $upload = (new UploadfileService($data['file'], $this->userInfo))
                 ->setUploadType($data['upload_type'])
                 ->setUploadConfig($uploadConfig)
                 ->upload();
