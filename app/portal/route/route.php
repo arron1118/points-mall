@@ -38,6 +38,7 @@ Route::get('error', 'Error/index');
 Route::group('goods', function () {
     Route::get('getDetail', 'mall.goods/getDetail');
     Route::get('getSpecs', 'mall.goods/getSpecs');
+    Route::post('checkUserIntegral', 'mall.goods/checkUserIntegral');
 });
 
 Route::group('order', function () {

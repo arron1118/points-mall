@@ -71,4 +71,13 @@ class Goods extends \app\common\controller\PortalController
 
         $this->success('success', $specsInfo);
     }
+
+    public function checkUserIntegral()
+    {
+        if ($this->request->isPost()) {
+            $param = $this->request->param();
+
+            $this->success('success', $param['integral'] * $param['quantity'] <= $this->userInfo->integral);
+        }
+    }
 }

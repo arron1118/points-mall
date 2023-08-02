@@ -61,7 +61,7 @@ class Orders extends PortalController
             'goods' => $goods,
             'quantity' => $param['quantity'],
             'address' => $address,
-            'default_address' => $default_address,
+            'default_address' => $default_address ?? $address[0],
         ]);
     }
 

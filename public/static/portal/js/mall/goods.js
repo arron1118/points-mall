@@ -20,7 +20,7 @@ define((function ($, window) {
         watch: {
             clientHeight: function (n, o) {
                 let contentHeight = this.clientHeight - document.getElementsByClassName('header')[0].offsetHeight - document.getElementsByClassName('footer')[0].offsetHeight
-                contentHeight > 250 && $('.content').css({ height: contentHeight  + 'px' })
+                contentHeight > 250 && $('.content').css({ minHeight: contentHeight  + 'px' })
             }
         },
         created(){
@@ -83,7 +83,26 @@ define((function ($, window) {
                     this.$message('请选择分类');
                 }
 
-                window.location.href = '/order.html?goods_id=' + this.goods.id + '&goods_specs_id=' + this.goodsSpecs.id + '&quantity=' + this.num
+                axios({
+                    url: '/goods/checkUserIntegral',
+                    params: {
+                        quantity: this.num,
+                        integral: this.goodsSpecs.integral
+                    },
+                    method: 'post',
+                }).then(res => {
+                    window.location.href = '/order.html?goods_id=' + this.goods.id + '&goods_specs_id=' + this.goodsSpecs.id + '&quantity=' + this.num
+
+                    // if (res.data.data) {
+                    //     window.location.href = '/order.html?goods_id=' + this.goods.id + '&goods_specs_id=' + this.goodsSpecs.id + '&quantity=' + this.num
+                    // } else {
+                    //     this.$notify({
+                    //         message: '您的积分不足以兑换该商品',
+                    //         type: 'info',
+                    //     })
+                    // }
+                })
+
             }
         }
     })

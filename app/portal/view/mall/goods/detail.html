@@ -1,4 +1,6 @@
-
+<style>
+  .goods-detail img { max-width: 100%; height: auto !important; }
+</style>
 <div class="content container py-5">
   <div id="numberApp">
     <div v-if="goods">
@@ -46,8 +48,8 @@
         </div>
       </div>
 
-      <div class="my-5">
-        <div v-html="goods.detail"></div>
+      <div class="my-5 goods-detail">
+        <div class="overflow-hidden" v-html="goods.detail"></div>
       </div>
     </div>
     <div v-if="errMessage" class="d-flex justify-content-center" :style="{'height': errHeight}">
