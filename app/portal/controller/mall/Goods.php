@@ -43,6 +43,19 @@ class Goods extends \app\common\controller\PortalController
             $this->error('商品已经下架或者不存在');
         }
 
+        $history = [
+            'goods_id' => $goods->id,
+            'title' => $goods->title,
+            'user_id' => $this->userInfo->id ?? 0,
+            'company_id' => $goods->company_id,
+            'platform' => $this->agent->platform(),
+            'platform_version' => $this->agent->version($this->agent->platform()),
+            'browser' => $this->agent->browser(),
+            'browser_version' => $this->agent->version($this->agent->browser()),
+            'device' => $this->agent->device(),
+            'device_type' => $this->agent->deviceType(),
+        ];
+
         $goods['detail'] = htmlspecialchars_decode($goods['detail']);
         $specs = $this->request->param('specs', '');
         if ($specs) {
@@ -55,8 +68,15 @@ class Goods extends \app\common\controller\PortalController
                 $goods->market_price = $specsInfo->market_price;
                 $goods->integral = $specsInfo->integral;
                 $goods->total_stock = $specsInfo->stock;
+
+                $history['goods_specs_id'] = $specsInfo->id;
             }
         }
+
+        // 浏览记录
+        ++$goods->view_count;
+        $goods->save();
+        $goods->goodsHistory()->save($history);
 
         $this->success('success', $goods);
     }
@@ -70,14 +90,5 @@ class Goods extends \app\common\controller\PortalController
         ])->find();
 
         $this->success('success', $specsInfo);
-    }
-
-    public function checkUserIntegral()
-    {
-        if ($this->request->isPost()) {
-            $param = $this->request->param();
-
-            $this->success('success', $param['integral'] * $param['quantity'] <= $this->userInfo->integral);
-        }
     }
 }

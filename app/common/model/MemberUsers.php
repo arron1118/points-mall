@@ -24,37 +24,37 @@ class MemberUsers extends TimeModel
         return $this->hasMany(MallOrders::class, $this->foreignKey, $this->localKey);
     }
 
-    public function order_payment()
+    public function orderPayment()
     {
         return $this->hasMany(MallOrderPayment::class, $this->foreignKey, $this->localKey);
     }
 
-    public function signin_logs()
+    public function signinLogs()
     {
         return $this->hasMany(MemberSigninLogs::class, $this->foreignKey, $this->localKey);
     }
 
-    public function lottery_logs()
+    public function lotteryLogs()
     {
         return $this->hasMany(MemberLotteryLogs::class, $this->foreignKey, $this->localKey);
     }
 
-    public function lottery_prizes()
+    public function lotteryPrizes()
     {
         return $this->hasMany(MemberLotteryPrizes::class, $this->foreignKey, $this->localKey);
     }
 
-    public function lottery_receive()
+    public function lotteryReceive()
     {
         return $this->hasMany(MemberLotteryReceive::class, $this->foreignKey, $this->localKey);
     }
 
-    public function integral_logs()
+    public function integralLogs()
     {
         return $this->hasMany(MemberIntegralLogs::class, $this->foreignKey, $this->localKey);
     }
 
-    public function evaluate_messages()
+    public function evaluateMessages()
     {
         return $this->hasMany(MallGoodsEvaluateMessages::class, $this->foreignKey, $this->localKey);
     }

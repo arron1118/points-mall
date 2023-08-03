@@ -38,12 +38,14 @@ Route::get('error', 'Error/index');
 Route::group('goods', function () {
     Route::get('getDetail', 'mall.goods/getDetail');
     Route::get('getSpecs', 'mall.goods/getSpecs');
-    Route::post('checkUserIntegral', 'mall.goods/checkUserIntegral');
 });
 
 Route::group('order', function () {
     Route::get('/', 'mall.orders/index');
     Route::post('getGoodsDetail', 'mall.orders/getGoodsDetail');
+    Route::post('createOrder', 'mall.orders/createOrder');
+    Route::post('checkUserIntegral', 'mall.orders/checkUserIntegral');
+    Route::get('success', 'mall.orders/orderSuccess');
 });
 
 Route::group('address', function () {

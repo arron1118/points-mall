@@ -78,29 +78,27 @@ define((function ($, window) {
                 }
             },
             order() {
-                let params = {}
                 if (this.goods.attribute_list && !this.goodsSpecs) {
-                    this.$message('请选择分类');
+                    this.$message('请选择分类')
+                    return false
                 }
 
                 axios({
-                    url: '/goods/checkUserIntegral',
+                    url: '/order/checkUserIntegral',
                     params: {
                         quantity: this.num,
                         integral: this.goodsSpecs.integral
                     },
                     method: 'post',
                 }).then(res => {
-                    window.location.href = '/order.html?goods_id=' + this.goods.id + '&goods_specs_id=' + this.goodsSpecs.id + '&quantity=' + this.num
-
-                    // if (res.data.data) {
-                    //     window.location.href = '/order.html?goods_id=' + this.goods.id + '&goods_specs_id=' + this.goodsSpecs.id + '&quantity=' + this.num
-                    // } else {
-                    //     this.$notify({
-                    //         message: '您的积分不足以兑换该商品',
-                    //         type: 'info',
-                    //     })
-                    // }
+                    if (res.data.data) {
+                        window.location.href = '/order.html?goods_id=' + this.goods.id + '&goods_specs_id=' + this.goodsSpecs.id + '&quantity=' + this.num
+                    } else {
+                        this.$notify({
+                            message: '您的积分不足以兑换该商品',
+                            type: 'info',
+                        })
+                    }
                 })
 
             }

@@ -3,9 +3,7 @@
   <div  id="tableApp">
     <div class="mb-5 border-bottom" v-if="tableData.length > 0">
       <template>
-        <el-table ref="multipleTable" border :data="tableData" tooltip-effect="dark" style="width: 100%"
-                  @selection-change="handleSelectionChange">
-
+        <el-table ref="multipleTable" border :data="tableData" tooltip-effect="dark" style="width: 100%">
           <el-table-column label="图片" width="180" align="center">
             <template slot-scope="scope">
               <el-avatar shape="square" :size="80" fit="contain" :src="scope.row.logo"></el-avatar>
@@ -36,11 +34,11 @@
               </div>
               <el-dropdown @command="handleCommand">
               <span class="el-dropdown-link">
-                {{ select_address }}<i class="el-icon-arrow-down el-icon--right"></i>
+                {{ selected_address.address }}<i class="el-icon-arrow-down el-icon--right"></i>
               </span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item :command="item" v-for="(item, index) in address">
-                    {{ item }}
+                    {{ item.address }}
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
@@ -51,7 +49,7 @@
           <div class="col-lg-6 col-12">
             <div class="d-flex align-items-center justify-content-end flex-wrap my-lg-0 my-4">
               <span>共<span class="theme-red mx-1">{{ quantity }}</span>件</span>
-              <span class="mx-4">积分支付：<span class="theme-red">{{ total_fee }}</span></span>
+              <p class="mx-4"><span>积分支付：</span><span class="theme-red fs-2">{{ total_fee }}</span></p>
               <span class="theme-btn1 mt-lg-0" @click="order">结算</span>
             </div>
           </div>
@@ -93,30 +91,18 @@
     el: '#tableApp',
     data: function () {
       return {
-        dialogFormVisible: false,
         form: {
           address: ''
         },
         tableData: [],
-        multipleSelection: [],
-        allchecked: false,
         address: [],
         goods: {},
-        select_address: '',
+        selected_address: '',
         quantity: 0,
         total_fee: 0,
       }
     },
     watch: {
-      // tableData: function (n, o) {
-      //   this.tableData.forEach(row => {
-      //     if (row.goodsSpecs.length > 0) {
-      //       this.total_fee += row.goodsSpecs[0].integral * this.quantity
-      //     } else {
-      //       this.total_fee += row.integral * this.quantity
-      //     }
-      //   })
-      // },
       quantity: function (n, o) {
         let total_fee = 0
         this.tableData.forEach(row => {
@@ -141,7 +127,7 @@
             this.tableData.push(res.data.data.goods)
             this.goods = res.data.data.goods
             this.address = res.data.data.address
-            this.select_address = res.data.data.default_address
+            this.selected_address = res.data.data.default_address
             this.quantity = res.data.data.quantity
           }
         }).catch(err => {
@@ -149,31 +135,46 @@
         })
       },
       handleCommand(command) {
-        this.select_address = command
+        this.selected_address = command
       },
       order() {
-        console.log(this.multipleSelection)
-        return
-        if (!this.multipleSelection.length) {
-          this.$message({
-            message: '请选择需要结算的数据！',
-            type: 'warning'
-          });
-        } else {
-          // todo
-          // axios.post('https://www.baidu.com', {username: 'lqp', age: 18}).then(res => {
-          //     console.log(res)
-          window.location.href = './changeSuccess.html'
-
-          // }).catch(err => {
-          //     console.log(err)
-          // })
-        }
-
+        axios({
+          url: '/order/checkUserIntegral',
+          params: {
+            quantity: this.quantity,
+            integral: this.goods.goodsSpecs[0].integral
+          },
+          method: 'post',
+        }).then(res => {
+          if (res.data.data) {
+              axios({
+                url: '/order/createOrder',
+                params: {
+                  goods_id: this.goods.id,
+                  goods_specs_id: this.goods.goodsSpecs[0].id,
+                  quantity: this.quantity,
+                  address_id: this.selected_address.id,
+                  address: this.selected_address.address,
+                },
+                method: 'post',
+              }).then(r => {
+                console.log(r)
+                let message = { message: r.data.msg }
+                if (r.data.code === 1) {
+                  window.location.href = '/order/success'
+                } else {
+                  message.type = 'error'
+                  this.$message(message)
+                }
+              })
+          } else {
+              this.$notify({
+                  message: '您的积分不足以兑换该商品',
+                  type: 'info',
+              })
+          }
+        })
       },
-      handleSelectionChange(val) {
-        this.multipleSelection = val;
-      }
     }
   })
 </script>
