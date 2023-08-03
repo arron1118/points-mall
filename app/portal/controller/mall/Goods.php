@@ -20,6 +20,38 @@ class Goods extends \app\common\controller\PortalController
         $this->model = new MallGoods();
     }
 
+    public function getGoodsList()
+    {
+        $page = $this->request->param('page/d', 1);
+        $limit = $this->request->param('limit/d', 15);
+        $keyword = $this->request->param('keyword/s', '');
+
+        $where = [
+            ['status', '=', 1],
+        ];
+
+        if ($keyword) {
+            $where[] = ['title', 'like', '%' . $keyword . '%'];
+        }
+
+        $offset = ($page - 1) * $limit;
+
+        $total = $this->model->where($where)->count();
+
+        $goods = $this->model->where($where)
+            ->order('sales desc, id desc, sort desc')
+            ->limit($offset, $limit)
+            ->select();
+
+        $noMore = $limit * $page >= $total;
+
+        $this->success('success', [
+            'total' => $total,
+            'list' => $goods,
+            'noMore' => $noMore,
+        ]);
+    }
+
     public function detail($id = 0)
     {
         if (!$id) {

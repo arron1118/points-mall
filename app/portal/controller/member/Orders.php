@@ -33,7 +33,9 @@ class Orders extends \app\common\controller\PortalController
             $list = $this->model->with(['orderItems'])
                 ->where([
                 'user_id' => $this->userInfo->id,
-            ])->order('id desc')->select();
+            ])->order('id desc')
+                ->select()
+                ->append(['status_text']);
 
             $this->success('success', $list);
         }

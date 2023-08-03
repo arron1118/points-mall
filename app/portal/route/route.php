@@ -38,6 +38,7 @@ Route::get('error', 'Error/index');
 Route::group('goods', function () {
     Route::get('getDetail', 'mall.goods/getDetail');
     Route::get('getSpecs', 'mall.goods/getSpecs');
+    Route::get('getGoodsList', 'mall.goods/getGoodsList');
 });
 
 Route::group('order', function () {

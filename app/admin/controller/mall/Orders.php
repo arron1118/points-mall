@@ -39,19 +39,20 @@ class Orders extends \app\common\controller\AdminController
             }
             list($page, $limit, $where) = $this->buildTableParames();
             $count = $this->model
-                ->with(['user'])
+                ->with(['users'])
                 ->where($where)
                 ->count();
             $list = $this->model
                 ->with([
-                    'user' => function ($query) {
+                    'users' => function ($query) {
                         return $query->field('id, username, realname');
                     }
                 ])
                 ->where($where)
                 ->page($page, $limit)
                 ->order($this->sort)
-                ->select();
+                ->select()
+                ->append(['status_text']);
             $data = [
                 'code'  => 0,
                 'msg'   => '',

@@ -15,16 +15,6 @@ class Index extends PortalController
 {
     public function index()
     {
-        $page = $this->request->param('page', 15);
-        $limit = $this->request->param('limit', 1);
-        $goods = MallGoods::where('status', 1)
-            ->order('id desc, sort desc')
-            ->limit(($limit - 1) * $page, $page)
-            ->select();
-
-        $this->view->assign([
-            'goods' => $goods,
-        ]);
         return $this->view->fetch();
     }
 

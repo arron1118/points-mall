@@ -10,25 +10,25 @@
                     style="width: 100%">
             <el-table-column label="商品图片">
               <template slot-scope="scope">
-                <el-avatar shape="square" :size="100" fit="contain" :src="scope.row.url">
+                <el-avatar shape="square" :size="100" fit="contain" :src="scope.row.orderItems[0].img">
                 </el-avatar>
               </template>
             </el-table-column>
             <el-table-column label="商品名称">
-              <template slot-scope="scope">{{ scope.row.date }}</template>
+              <template slot-scope="scope">{{ scope.row.orderItems[0].title }}</template>
             </el-table-column>
             <el-table-column prop="name" label="积分" align="center">
-              <template slot-scope="scope">{{ scope.row.num }}</template>
+              <template slot-scope="scope">{{ scope.row.integral }}</template>
             </el-table-column>
             <el-table-column prop="address" label="数量" align="center">
-              <template slot-scope="scope">{{ scope.row.date }}</template>
+              <template slot-scope="scope">x {{ scope.row.orderItems[0].quantity }}</template>
             </el-table-column>
 
             <el-table-column label="订单状态" align="center">
-              <template slot-scope="scope">{{ scope.row.date }}</template>
+              <template slot-scope="scope">{{ scope.row.status_text }}</template>
             </el-table-column>
             <el-table-column label="成交时间" align="center">
-              <template slot-scope="scope">{{ scope.row.date }}</template>
+              <template slot-scope="scope">{{ scope.row.create_time }}</template>
             </el-table-column>
 
           </el-table>
@@ -43,21 +43,7 @@
     el: '#tableApp',
     data: function () {
       return {
-        tableData: [{
-          id: 1,
-          url: './imgs/1.png',
-          date: '2016-05-02',
-          name: '王小虎',
-          num: 1,
-          address: '上海市普陀区金沙江路 1518 弄'
-        }, {
-          id: 2,
-          url: './imgs/1.png',
-          date: '2016-05-04',
-          name: '王小虎',
-          num: 1,
-          address: '上海市普陀区金沙江路 1517 弄'
-        }]
+        tableData: []
       }
     },
     created () {

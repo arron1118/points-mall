@@ -1,27 +1,30 @@
 
 <div class="content container mt-4 mb-5">
     <image style="width: 100%; height: auto" src="__STATIC__/portal/imgs/banner.png" fit="contain" class="mb-5"></image>
-    <div class="title">
+    <div class="title mb-5">
         <h1 class="text-center theme-size30 mb-4">检测排查案例</h1>
-        <h3 class="text-center theme-size20 theme-second mb-5">16年房屋安全鉴定经验，服务超3000+项目案例见证</h3>
+        <h3 class="text-center theme-size20 theme-second">16年房屋安全鉴定经验，服务超3000+项目案例见证</h3>
     </div>
-    <div class="productlist">
-        <div class="row g-5">
-            {foreach $goods as $key => $val}
-            <div class="col-lg-3 col-6">
+    <div class="productlist mb-5" id="productList">
+        <div class="row g-5 mb-3">
+            <div class="col-lg-3 col-6" v-for="(item, index) in productList">
                 <div class="">
-                    <image style="width: 100%; height: auto" src="{$val.logo}" fit="contain">
+                    <image style="width: 100%; height: auto" :src="item.logo" fit="contain">
                     </image>
                     <div class="theme-size20 line1 my-2">
-                        {$val.title}
+                        {{ item.title }}
                     </div>
-                    <div class="theme-size15 theme-second mb-3">限时价：<span class="theme-red">{$val.integral}积分</span></div>
-                    <a href="{:url('/detail', ['id' => $val.id])}" class="theme-btn1">马上兑换</a>
+                    <div class="theme-size15 theme-second mb-3">限时价：<span class="theme-red">{{ item.integral }}积分</span></div>
+                    <a :href="'/detail?id=' + item.id" class="theme-btn1">马上兑换</a>
                 </div>
             </div>
-            {/foreach}
         </div>
-        <div class="text-center theme-second theme-size15 my-5">没有更多了~</div>
+        <div class="row mb-3">
+            <div class="col">
+                <el-divider v-if="!noMore" @click="getGoodsList">加载更多</el-divider>
+                <el-divider v-if="noMore">没有更多了</el-divider>
+            </div>
+        </div>
     </div>
     <div class="row g-4">
         <div class="col-lg-3 col-6">

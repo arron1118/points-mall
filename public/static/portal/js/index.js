@@ -2,7 +2,38 @@ define((function ($, window) {
     const Controller = {
 
         index: function () {
+            return new Vue({
+                el: '#productList',
+                data: function () {
+                    return {
+                        productList: [],
+                        loading: false,
+                        noMore: false,
+                        page: 1,
+                    }
+                },
+                created() {
+                    this.getGoodsList()
+                },
+                methods: {
+                    getGoodsList() {
+                        if (!this.noMore) {
+                            axios({
+                                url: '/goods/getGoodsList',
+                                params: {
+                                    limit: 1,
+                                    page: this.page,
+                                },
+                            }).then(res => {
+                                this.productList = this.productList.concat(res.data.data.list)
+                                this.noMore = res.data.data.noMore
 
+                                ++this.page
+                            });
+                        }
+                    }
+                }
+            })
         },
 
         login: function () {

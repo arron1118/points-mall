@@ -10,6 +10,22 @@ namespace app\common\model;
 class MallOrders extends TimeModel
 {
 
+    public function getStatusTextAttr($value, $data)
+    {
+        return $this->getStatusList()[$data['status']];
+    }
+
+    public function getStatusList()
+    {
+        return [
+            '未付款',
+            '已付款',
+            '已发货',
+            '交易完成',
+            '交易关闭',
+        ];
+    }
+
     public function users()
     {
         return $this->belongsTo(MemberUsers::class, 'user_id', 'id');

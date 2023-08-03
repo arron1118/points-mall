@@ -21,11 +21,11 @@ define(["jquery", "easy-admin"], function ($, ea) {
                     {type: "checkbox"},
                     {field: 'id', width: 80, title: 'ID'},
                     {field: 'order_no', width: 250, title: '订单号'},
-                    {field: 'user.username', minWidth: 80, title: '用户'},
+                    {field: 'users.username', minWidth: 80, title: '用户'},
                     {field: 'amount', minWidth: 80, title: '金额', search: false,},
                     {field: 'integral', minWidth: 80, title: '积分', search: false,},
                     {field: 'postage', minWidth: 80, title: '运费', search: false,},
-                    {field: 'status', title: '状态', width: 85, selectList: {0: '禁用', 1: '启用'}},
+                    {field: 'status', title: '状态', width: 85, selectList: {0: '未付款', 1: '已付款', 2: '已发货', 3: '交易完成', 4: '交易关闭'}},
                     {field: 'create_time', minWidth: 80, title: '创建时间', search: false,},
                     {
                         width: 250,
