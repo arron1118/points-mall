@@ -36,7 +36,7 @@ class LotteryLogs extends \app\common\controller\AdminController
             if (input('selectFields')) {
                 return $this->selectList();
             }
-            list($page, $limit, $where) = $this->buildTableParames();
+            [$page, $limit, $where] = $this->buildTableParames();
             $count = $this->model
                 ->with(['users', 'lottery', 'lottery_prizes'])
                 ->where($where)
@@ -49,8 +49,8 @@ class LotteryLogs extends \app\common\controller\AdminController
                     'lottery' => function ($query) {
                         return $query->field('id, title');
                     },
-                    'lottery_prizes' => function ($query) {
-                        return $query->field('id, title');
+                    'lotteryPrizes' => function ($query) {
+                        return $query->field('lottery_log_id, prize_detail');
                     }
                 ])
                 ->where($where)

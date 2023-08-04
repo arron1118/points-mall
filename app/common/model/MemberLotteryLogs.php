@@ -24,4 +24,9 @@ class MemberLotteryLogs extends TimeModel
         return $this->belongsTo(MallLottery::class, 'lottery_id', 'id');
     }
 
+    public function lotteryPrizes()
+    {
+        return $this->hasOne(MemberLotteryPrizes::class, 'lottery_log_id', 'id');
+    }
+
 }

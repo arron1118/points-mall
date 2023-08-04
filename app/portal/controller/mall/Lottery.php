@@ -60,7 +60,8 @@ class Lottery extends \app\common\controller\PortalController
 
             // 抽奖记录
             $logs['lottery_detail'] = $lottery->toArray();
-            (new MemberLotteryLogs())->save($logs);
+            $MemberLotteryLogsModel = new MemberLotteryLogs();
+            $MemberLotteryLogsModel->save($logs);
 
             $appendText = '';
             switch ((int) $post['type']) {
@@ -70,7 +71,8 @@ class Lottery extends \app\common\controller\PortalController
                     $this->userInfo->save();
 
                     // 积分变动
-                    (new MemberIntegralLogs())->save([
+                    $MemberIntegralLogsModel = new MemberIntegralLogs();
+                    $MemberIntegralLogsModel->save([
                         'user_id' => $this->userInfo->id,
                         'type' => 2,
                         'integral_amount' => $post['amount'],
@@ -94,6 +96,7 @@ class Lottery extends \app\common\controller\PortalController
                 $prize['lottery_detail'] = $lottery->toArray();
                 $prize['prize_id'] = $post['id'];
                 $prize['prize_detail'] = $post;
+                $prize['lottery_log_id'] = $MemberLotteryLogsModel->id;
                 (new MemberLotteryPrizes())->save($prize);
 
                 $message['content'] = '恭喜您在参与“' . $lottery['title'] . '”抽奖中获得“' . $post['title'] . '”' . $appendText;

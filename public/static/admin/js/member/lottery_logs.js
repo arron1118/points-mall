@@ -23,7 +23,7 @@ define(["jquery", "easy-admin"], function ($, ea) {
                     {field: 'id', width: 80, title: 'ID'},
                     {field: 'users.username', minWidth: 80, title: '用户名称'},
                     {field: 'lottery.title', minWidth: 80, title: '抽奖名称'},
-                    {field: 'lottery_prizes.title', minWidth: 80, title: '奖品'},
+                    {field: 'lotteryPrizes?.prize_detail.title || "谢谢参与"', minWidth: 80, title: '奖品'},
                     {field: 'create_time', minWidth: 80, title: '创建时间', search: 'range'},
                     {
                         width: 250,
