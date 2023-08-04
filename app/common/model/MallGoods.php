@@ -54,4 +54,9 @@ class MallGoods extends TimeModel
         return $this->hasMany(MallGoodsHistory::class, 'goods_id', 'id');
     }
 
+    public function orderItems()
+    {
+        return $this->hasMany(MallOrderItems::class, 'goods_id', 'id');
+    }
+
 }

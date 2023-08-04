@@ -44,11 +44,10 @@ class Goods extends AdminController
             }
             [$page, $limit, $where] = $this->buildTableParames();
             $count = $this->model
-                ->withJoin('category', 'LEFT')
                 ->where($where)
                 ->count();
             $list = $this->model
-                ->withJoin('category', 'LEFT')
+                ->with(['company', 'category'])
                 ->where($where)
                 ->page($page, $limit)
                 ->order($this->sort)

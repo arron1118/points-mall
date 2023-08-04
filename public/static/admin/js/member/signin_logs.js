@@ -21,9 +21,14 @@ define(["jquery", "easy-admin"], function ($, ea) {
                 cols: [[
                     {type: "checkbox"},
                     {field: 'id', width: 80, title: 'ID'},
-                    {field: 'users.username', minWidth: 80, title: '用户名称'},
-                    {field: 'ip', minWidth: 80, title: 'IP'},
-                    {field: 'platform', minWidth: 80, title: '设备'},
+                    {field: 'users.username', minWidth: 120, title: '用户名称'},
+                    {field: 'ip', minWidth: 50, title: 'IP'},
+                    {field: 'platform', minWidth: 50, title: '平台'},
+                    {field: 'platform_version', minWidth: 50, title: '平台版本'},
+                    {field: 'browser', minWidth: 50, title: '浏览器'},
+                    {field: 'browser_version', minWidth: 50, title: '浏览器版本'},
+                    {field: 'device', minWidth: 50, title: '设备'},
+                    {field: 'device_type', minWidth: 50, title: '设备类型'},
                     {field: 'create_time', minWidth: 80, title: '创建时间', search: 'range'},
                 ]],
             });

@@ -43,6 +43,7 @@ class Address extends \app\common\controller\AdminController
                 ->where($where)
                 ->count();
             $list = $this->model
+                ->fieldRaw('id, user_id, receiver_name, receiver_phone, concat(receiver_province, receiver_city, receiver_district, receiver_address) as address, create_time')
                 ->with([
                     'users' => function ($query) {
                         return $query->field('id, username, realname');

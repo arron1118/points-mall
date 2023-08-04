@@ -37,7 +37,7 @@ class Orders extends \app\common\controller\AdminController
             if (input('selectFields')) {
                 return $this->selectList();
             }
-            list($page, $limit, $where) = $this->buildTableParames();
+            [$page, $limit, $where] = $this->buildTableParames();
             $count = $this->model
                 ->with(['users'])
                 ->where($where)
@@ -46,6 +46,9 @@ class Orders extends \app\common\controller\AdminController
                 ->with([
                     'users' => function ($query) {
                         return $query->field('id, username, realname');
+                    },
+                    'orderItems' => function ($query) {
+                        return $query->field('order_no, img, title, specs_name, quantity');
                     }
                 ])
                 ->where($where)
