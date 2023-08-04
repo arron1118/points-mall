@@ -33,6 +33,8 @@ Route::get('registerSuccess', 'Index/registerSuccess');
 
 Route::get('detail/:id?', 'mall.goods/detail');
 
+Route::get('search', 'mall.Search/index');
+
 Route::get('error', 'Error/index');
 
 Route::group('goods', function () {

@@ -24,7 +24,7 @@ class Goods extends \app\common\controller\PortalController
     {
         $page = $this->request->param('page/d', 1);
         $limit = $this->request->param('limit/d', 15);
-        $keyword = $this->request->param('keyword/s', '');
+        $keyword = $this->request->param('kw/s', '');
 
         $where = [
             ['status', '=', 1],
@@ -39,6 +39,7 @@ class Goods extends \app\common\controller\PortalController
         $total = $this->model->where($where)->count();
 
         $goods = $this->model->where($where)
+            ->field('id, title, logo, integral')
             ->order('sales desc, id desc, sort desc')
             ->limit($offset, $limit)
             ->select();

@@ -1,0 +1,24 @@
+<div class="content container mt-4 mb-5">
+  <div class="productlist mb-5" id="productList">
+    <div class="mb-3 text-light-emphasis" v-if="total !== ''">共找到 {{ total }} 条数据</div>
+    <div class="row g-5 mb-3">
+      <div class="col-lg-3 col-6" v-for="(item, index) in productList">
+        <div class="">
+          <image style="width: 100%; height: auto" :src="item.logo" fit="contain">
+          </image>
+          <div class="theme-size20 line1 my-2">
+            {{ item.title }}
+          </div>
+          <div class="theme-size15 theme-second mb-3">限时价：<span class="theme-red">{{ item.integral }}积分</span></div>
+          <a :href="'/detail?id=' + item.id" class="theme-btn1">马上兑换</a>
+        </div>
+      </div>
+    </div>
+    <div class="row mb-3">
+      <div class="col">
+        <el-divider v-if="!noMore && total !== ''" @click="getGoodsList">加载更多</el-divider>
+        <el-divider v-if="noMore && total > 0">没有更多了</el-divider>
+      </div>
+    </div>
+  </div>
+</div>

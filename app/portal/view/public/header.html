@@ -96,3 +96,34 @@
     </div>
   </div>
 </div>
+
+<script>
+  new Vue({
+    el: '#searchApp',
+    data: function () {
+      return {
+        searchForm: {
+          keyword: ''
+        }
+      }
+    },
+    created: function () {
+      let params = new URLSearchParams(new URL(window.location.href).search.slice(1))
+      this.searchForm.keyword = params.get('kw')
+    },
+    methods: {
+      searching() {
+        console.log(this.searchForm)
+        if (this.searchForm.keyword === '') {
+          return this.$message({
+            message: '请输入搜索关键词！',
+            type: 'warning'
+          })
+        } else {
+          window.location.href = '/search?kw=' + this.searchForm.keyword
+        }
+
+      }
+    }
+  })
+</script>

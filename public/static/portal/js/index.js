@@ -21,7 +21,6 @@ define((function ($, window) {
                             axios({
                                 url: '/goods/getGoodsList',
                                 params: {
-                                    limit: 1,
                                     page: this.page,
                                 },
                             }).then(res => {
