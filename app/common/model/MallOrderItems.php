@@ -10,6 +10,12 @@ namespace app\common\model;
 class MallOrderItems extends TimeModel
 {
 
+    protected $json = [
+        'specs_name',
+    ];
+
+    protected $jsonAssoc = true;
+
     public function goods()
     {
         return $this->belongsTo(MallGoods::class, 'goods_id', 'id');

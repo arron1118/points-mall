@@ -1,66 +1,115 @@
+
+<style>
+    .order-list:hover { border-color: #FF2C49 !important; }
+</style>
 <div class="content container mb-5 mt-4">
-  <div class="row">
-    {include file="member/user/user_nav" select="order" /}
-    <div class="col-lg-9 col-12">
-      <div class="theme-size20 pt-2 ps-lg-0 ps-3 mt-lg-0 mt-4">我的兑换订单列表</div>
-      <div class="my-5 border-bottom" id="tableApp">
+    <div class="row">
+        {include file="member/user/user_nav" select="order" /}
+        <div class="col-lg-10 col-12">
+            <div class="my-3" id="tableApp">
+                <div class="border border-light-subtle mb-3 bg-secondary-subtle">
+                    <div class="table-responsive">
+                        <table class="table text-center m-0 table-borderless">
+                            <tr>
+                                <td>宝贝</td>
+                                <td width="100">单价</td>
+                                <td width="100">数量</td>
+                                <td width="100">实付款</td>
+                                <td width="100">交易状态</td>
+{/*                                <td width="180">交易操作</td>*/}
+                            </tr>
+                        </table>
+                    </div>
+                </div>
 
-        <template>
-          <el-table ref="multipleTable" border :data="tableData" tooltip-effect="dark"
-                    style="width: 100%">
-            <el-table-column label="商品图片">
-              <template slot-scope="scope">
-                <el-avatar shape="square" :size="100" fit="contain" :src="scope.row.orderItems[0].img">
-                </el-avatar>
-              </template>
-            </el-table-column>
-            <el-table-column label="商品名称">
-              <template slot-scope="scope">{{ scope.row.orderItems[0].title }}</template>
-            </el-table-column>
-            <el-table-column prop="name" label="积分" align="center">
-              <template slot-scope="scope">{{ scope.row.integral }}</template>
-            </el-table-column>
-            <el-table-column prop="address" label="数量" align="center">
-              <template slot-scope="scope">x {{ scope.row.orderItems[0].quantity }}</template>
-            </el-table-column>
+                <div class="border border-light-subtle bg-secondary-subtle mb-2 shadow-sm order-list" v-for="(item, index) in tableData">
+                    <div class="row align-items-center" style="font-size: 13px;">
+                        <div class="col">
+                            <div class=" p-2"><span class="me-3">交易时间：{{ item.create_time }}</span> 订单号：{{ item.order_no }}</div>
+                        </div>
+                        <div class="col p-2 d-none">{{ item.company.username }}</div>
+                    </div>
 
-            <el-table-column label="订单状态" align="center">
-              <template slot-scope="scope">{{ scope.row.status_text }}</template>
-            </el-table-column>
-            <el-table-column label="成交时间" align="center">
-              <template slot-scope="scope">{{ scope.row.create_time }}</template>
-            </el-table-column>
+                    <div class="table-responsive bg-white">
+                        <table class="table table-bordered border-light-subtle text-center m-0">
+                            <tr>
+                                <td class="border-start-0 p-0">
+                                    <div class="table-responsive">
+                                        <table class="table m-0 table-borderless text-center ">
+                                            <tr v-for="(orderItem, orderIndex) in item.orderItems">
+                                                <td>
+                                                    <div class="card border-0 text-start">
+                                                        <div class="row g-0">
+                                                            <div class="col-md-3 col-lg-2">
+                                                                <div style="max-width: 120px;">
+                                                                    <img :src="orderItem.img" class="img-fluid rounded-start"
+                                                                         alt="">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-9 col-lg-10">
+                                                                <div class="card-body py-md-0">
+                                                                    <p class="card-title">{{ orderItem.title }}</p>
+                                                                    <p class="card-text text-muted">
+                                                                        <span class="me-2" v-for="(attrItem, attrIndex) in orderItem.goods.attribute_list">
+                                                                            {{ attrIndex }}： <template v-for="(aItem, aIndex) in attrItem">{{ orderItem.specs_name.includes(aItem) ? aItem : '' }}</template>
+                                                                        </span>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td width="100">{{ orderItem.integral }}</td>
+                                                <td width="100">{{ orderItem.quantity }}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </td>
+                                <td width="100">
+                                    <span class="fw-bold">{{ item.integral }}</span>
+                                </td>
+                                <td width="100">
+                                    {{ item.status_text }}
+                                </td>
+{/*                                <td width="180" class="border-end-0">*/}
+{/*                                    {{ item.create_time &cc;&cc;*/}
+{/*                                </td>*/}
+                            </tr>
+                        </table>
+                    </div>
 
-          </el-table>
-        </template>
-      </div>
+                    <div class="p-2 text-light-emphasis">
+                        收货地址：{{ item.address }}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <script>
-  new Vue({
-    el: '#tableApp',
-    data: function () {
-      return {
-        tableData: []
-      }
-    },
-    created () {
-      this.getOrderList()
-    },
-    methods: {
-      getOrderList: function () {
-        axios({
-          url: '/account/getOrderList',
-        }).then(res => {
-          if (res.data.code === 1) {
-            this.tableData = res.data.data
-          } else {
-            this.$message(res.data.msg)
-          }
-        })
-      }
-    }
-  })
+    new Vue({
+        el: '#tableApp',
+        data: function () {
+            return {
+                tableData: []
+            }
+        },
+        created() {
+            this.getOrderList()
+        },
+        methods: {
+            getOrderList: function () {
+                axios({
+                    url: '/account/getOrderList',
+                }).then(res => {
+                    if (res.data.code === 1) {
+                        this.tableData = res.data.data
+                    } else {
+                        this.$message(res.data.msg)
+                    }
+                })
+            }
+        }
+    })
 </script>

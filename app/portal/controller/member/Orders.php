@@ -30,7 +30,14 @@ class Orders extends \app\common\controller\PortalController
     public function getOrderList()
     {
         if ($this->request->isGet()) {
-            $list = $this->model->with(['orderItems'])
+            $list = $this->model->with(['orderItems' => function ($query) {
+                    return $query->with(['goods' => function ($q) {
+                        return $q->field('id, title, attribute_list');
+                    }]);
+                },
+                'company' => function ($query) {
+                return $query->field('id, username');
+            }])
                 ->where([
                 'user_id' => $this->userInfo->id,
             ])->order('id desc')

@@ -41,6 +41,9 @@ class Orders extends \app\common\controller\CompanyController
                 ->with([
                     'users' => function ($query) {
                         return $query->field('id, username, realname');
+                    },
+                    'orderItems' => function ($query) {
+                        return $query->field('order_no, img, title, specs_name, quantity');
                     }
                 ])
                 ->where($where)

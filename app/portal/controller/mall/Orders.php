@@ -101,7 +101,7 @@ class Orders extends PortalController
                         'img' => $goods->logo,
                         'title' => $goods->title,
                         'goods_specs_id' => $val->id,
-                        'specs_name' => $val->specs_name ?? implode(',', $val->specs_list),
+                        'specs_name' => $val->specs_list,
                         'price' => $val->market_price ?? $goods->market_price,
                         'integral' => $val->integral ?? $goods->integral,
                         'quantity' => $param['quantity']
