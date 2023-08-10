@@ -6,8 +6,18 @@
     <div class="row">
         {include file="member/user/user_nav" select="order" /}
         <div class="col-lg-10 col-12">
-            <div class="my-3" id="tableApp">
-                <div class="border border-light-subtle mb-3 bg-secondary-subtle">
+            <div class="my-0" id="tableApp">
+                <template>
+                    <el-tabs v-model="activeName" @tab-click="handleClick">
+                        <el-tab-pane label="所有订单" name="all"></el-tab-pane>
+                        <el-tab-pane label="待支付" name="waitPay"></el-tab-pane>
+                        <el-tab-pane label="待发货" name="waitSend"></el-tab-pane>
+                        <el-tab-pane label="待收货" name="waitConfirm"></el-tab-pane>
+                        <el-tab-pane label="待评价" name="waitRate"></el-tab-pane>
+                    </el-tabs>
+                </template>
+
+                <div class="border border-light-subtle mb-2 bg-secondary-subtle">
                     <div class="table-responsive">
                         <table class="table text-center m-0 table-borderless">
                             <tr>
@@ -16,72 +26,94 @@
                                 <td width="100">数量</td>
                                 <td width="100">实付款</td>
                                 <td width="100">交易状态</td>
-{/*                                <td width="180">交易操作</td>*/}
+                                <td width="120">交易操作</td>
                             </tr>
                         </table>
                     </div>
                 </div>
 
-                <div class="border border-light-subtle bg-secondary-subtle mb-2 shadow-sm order-list" v-for="(item, index) in tableData">
-                    <div class="row align-items-center" style="font-size: 13px;">
-                        <div class="col">
-                            <div class=" p-2"><span class="me-3">交易时间：{{ item.create_time }}</span> 订单号：{{ item.order_no }}</div>
-                        </div>
-                        <div class="col p-2 d-none">{{ item.company.username }}</div>
+                <template v-if="tableData.length > 0">
+                    <div class="d-flex justify-content-end mb-2">
+                        <el-pagination background layout="prev, pager, next"
+                                       :total="total"
+                                       :page-size="pageSize"
+                                       :current-page.sync="currentPage"
+                                       @current-change="currentPageChange"
+                                       :hide-on-single-page="true"
+                        ></el-pagination>
                     </div>
+                    <div class="border border-light-subtle bg-secondary-subtle mb-2 shadow-sm order-list" v-for="(item, index) in tableData">
+                        <div class="row align-items-center" style="font-size: 13px;">
+                            <div class="col">
+                                <div class=" p-2"><span class="me-3">交易时间：{{ item.create_time }}</span> 订单号：{{ item.order_no }}</div>
+                            </div>
+                            <div class="col p-2 d-none">{{ item.company.username }}</div>
+                        </div>
 
-                    <div class="table-responsive bg-white">
-                        <table class="table table-bordered border-light-subtle text-center m-0">
-                            <tr>
-                                <td class="border-start-0 p-0">
-                                    <div class="table-responsive">
-                                        <table class="table m-0 table-borderless text-center ">
-                                            <tr v-for="(orderItem, orderIndex) in item.orderItems">
-                                                <td>
-                                                    <div class="card border-0 text-start">
-                                                        <div class="row g-0">
-                                                            <div class="col-md-3 col-lg-2">
-                                                                <div style="max-width: 120px;">
-                                                                    <img :src="orderItem.img" class="img-fluid rounded-start"
-                                                                         alt="">
+                        <div class="table-responsive bg-white">
+                            <table class="table table-bordered border-light-subtle text-center m-0">
+                                <tr>
+                                    <td class="border-start-0 p-0">
+                                        <div class="table-responsive">
+                                            <table class="table m-0 table-borderless text-center ">
+                                                <tr v-for="(orderItem, orderIndex) in item.orderItems">
+                                                    <td>
+                                                        <div class="card border-0 text-start">
+                                                            <div class="row g-0">
+                                                                <div class="col-md-3 col-lg-2">
+                                                                    <div style="max-width: 120px;">
+                                                                        <img :src="orderItem.img" class="img-fluid rounded-start"
+                                                                             alt="">
+                                                                    </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="col-md-9 col-lg-10">
-                                                                <div class="card-body py-md-0">
-                                                                    <p class="card-title">{{ orderItem.title }}</p>
-                                                                    <p class="card-text text-muted">
+                                                                <div class="col-md-9 col-lg-10">
+                                                                    <div class="card-body py-md-0">
+                                                                        <p class="card-title">{{ orderItem.title }}</p>
+                                                                        <p class="card-text text-muted">
                                                                         <span class="me-2" v-for="(attrItem, attrIndex) in orderItem.goods.attribute_list">
                                                                             {{ attrIndex }}： <template v-for="(aItem, aIndex) in attrItem">{{ orderItem.specs_name.includes(aItem) ? aItem : '' }}</template>
                                                                         </span>
-                                                                    </p>
+                                                                        </p>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </td>
-                                                <td width="100">{{ orderItem.integral }}</td>
-                                                <td width="100">{{ orderItem.quantity }}</td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </td>
-                                <td width="100">
-                                    <span class="fw-bold">{{ item.integral }}</span>
-                                </td>
-                                <td width="100">
-                                    {{ item.status_text }}
-                                </td>
-{/*                                <td width="180" class="border-end-0">*/}
-{/*                                    {{ item.create_time &cc;&cc;*/}
-{/*                                </td>*/}
-                            </tr>
-                        </table>
-                    </div>
+                                                    </td>
+                                                    <td width="100">{{ orderItem.integral }}</td>
+                                                    <td width="100">{{ orderItem.quantity }}</td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </td>
+                                    <td width="100">
+                                        <span class="fw-bold">{{ item.integral }}</span>
+                                    </td>
+                                    <td width="100">
+                                        {{ item.status_text }}
+                                    </td>
+                                    <td width="120" class="border-end-0">
+                                        <div class="d-flex justify-content-center">
+                                            <a href="javascript:;" @click="delOrder(item.id)">删除</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
 
-                    <div class="p-2 text-light-emphasis">
-                        收货地址：{{ item.address }}
+                        <div class="p-2 text-light-emphasis">
+                            收货地址：{{ item.address }}
+                        </div>
                     </div>
-                </div>
+                    <div class="d-flex justify-content-end mb-2">
+                        <el-pagination background layout="prev, pager, next"
+                                       :total="total"
+                                       :page-size="pageSize"
+                                       :current-page.sync="currentPage"
+                                       @current-change="currentPageChange"
+                                       :hide-on-single-page="true"
+                        ></el-pagination>
+                    </div>
+                </template>
                 <el-empty v-if="isEmpty"></el-empty>
             </div>
         </div>
@@ -94,7 +126,11 @@
         data: function () {
             return {
                 tableData: [],
+                total: 0,
+                currentPage: 1,
+                pageSize: 50,
                 isEmpty: false,
+                activeName: 'all',
             }
         },
         created() {
@@ -104,15 +140,28 @@
             getOrderList: function () {
                 axios({
                     url: '/account/getOrderList',
+                    params: {
+                        page: this.currentPage,
+                        limit: this.pageSize,
+                    }
                 }).then(res => {
                     if (res.data.code === 1) {
-                        this.tableData = res.data.data
-                        this.isEmpty = res.data.data.length === 0
-                        console.log(this.isEmpty)
+                        this.tableData = res.data.data.list
+                        this.isEmpty = res.data.data.list.length === 0
+                        this.total = res.data.data.total
                     } else {
                         this.$message(res.data.msg)
                     }
                 })
+            },
+            currentPageChange: function (curr) {
+                this.getOrderList()
+            },
+            delOrder: function (id) {
+                console.log(id)
+            },
+            handleClick(tab, event) {
+                console.log(tab, this.activeName);
             }
         }
     })

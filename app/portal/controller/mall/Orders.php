@@ -92,6 +92,12 @@ class Orders extends PortalController
                 'address' => $param['address'],
                 'pay_time' => time(),
                 'status' => 1,
+                'platform' => $this->agent->platform(),
+                'platform_version' => $this->agent->version($this->agent->platform()),
+                'browser' => $this->agent->browser(),
+                'browser_version' => $this->agent->version($this->agent->browser()),
+                'device' => $this->agent->device(),
+                'device_type' => $this->agent->deviceType(),
             ];
             if ($this->model->save($order)) {
                 foreach ($goods->goodsSpecs as $val) {
