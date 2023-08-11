@@ -17,7 +17,7 @@
               <div class="theme-gray theme-size15 my-4">{{ k }}</div>
               <div class="row g-4 w-lg-75 w-100 mb-4">
                 <div class="col-lg-4 col-6" v-for="(item, index) in i" :key="index">
-                  <div class="theme-size15 p-2 text-center rounded" style="cursor: pointer;" :class="colorIndex === index ? 'theme-red border border-danger' : 'theme-second theme-bg1 border'" @click="changeColorCategray(item, index)">
+                  <div class="theme-size15 p-2 text-center rounded" style="cursor: pointer;" :class="goodsSpecs && goodsSpecs.specs_list.includes(item) ? 'theme-red border border-danger' : 'theme-second theme-bg1 border'" @click="changeColorCategray(item, index)">
                     {{ item }}
                   </div>
                 </div>

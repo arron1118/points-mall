@@ -15,6 +15,7 @@ define((function ($, window) {
                 errMessage: '',
                 errHeight: 'auto',
                 clientHeight: 0,
+                specs: [],
             }
         },
         watch: {
@@ -35,6 +36,7 @@ define((function ($, window) {
 
             let params = new URLSearchParams(new URL(window.location.href).search.slice(1))
             let id = params.get('id')
+            this.specs = params.get('specs').split(',')
 
             if (!id) {
                 this.$message({
@@ -45,25 +47,13 @@ define((function ($, window) {
 
             axios({
                 url: '/goods/getDetail',
-                params: {
-                    id: id
-                }
+                params: params
             }).then(res => {
                 if (res.data.code) {
                     this.goods = res.data.data
                     this.goodsCopy = Object.assign({}, res.data.data)
-                } else {
-                    this.errMessage = res.data.msg
-                }
-            });
-        },
-        methods:{
-            changeColorCategray(item, index){
-                this.colorIndex = this.colorIndex === index ? 0 : index
-                this.orderParams.specs_id = this.orderParams.specs_id === index ? 0 : index
 
-                if (this.colorIndex) {
-                    let goodsSpecs = this.goods.goodsSpecs.filter((val, i) => val.specs_list.includes(item))
+                    let goodsSpecs = this.goods.goodsSpecs.filter(val => val.specs_list.sort().toString() === this.specs.sort().toString())
                     if (goodsSpecs.length) {
                         this.goods.total_stock = goodsSpecs[0].stock
                         this.goods.market_price = goodsSpecs[0].market_price
@@ -71,11 +61,37 @@ define((function ($, window) {
                         this.goodsSpecs = goodsSpecs[0]
                     }
                 } else {
+                    this.errMessage = res.data.msg
+                }
+            });
+        },
+        methods:{
+            changeColorCategray(item, index){
+                // console.log(this.specs.includes(item))
+                // // this.specs.push(item)
+                // let d = this.specs.filter((val, i) => {
+                //     return this.specs.indexOf(item) !== i
+                // })
+                //
+                // console.log(d)
+                // this.specs = d
+                // console.log(this.specs)
+                // return
+
+                let goodsSpecs = this.goods.goodsSpecs.filter((val, i) => val.specs_list.includes(item))
+                if (goodsSpecs.length) {
+                    this.goods.total_stock = goodsSpecs[0].stock
+                    this.goods.market_price = goodsSpecs[0].market_price
+                    this.goods.integral = goodsSpecs[0].integral
+                    this.goodsSpecs = goodsSpecs[0]
+                } else {
                     this.goods.total_stock = this.goodsCopy.total_stock
                     this.goods.market_price = this.goodsCopy.market_price
                     this.goods.integral = this.goodsCopy.integral
                     this.goodsSpecs = null
                 }
+
+                console.log('goodsSpecs', this.goodsSpecs)
             },
             order() {
                 if (this.goods.attribute_list && !this.goodsSpecs) {

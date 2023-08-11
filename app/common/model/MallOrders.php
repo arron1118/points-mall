@@ -15,14 +15,41 @@ class MallOrders extends TimeModel
         return $this->getStatusList()[$data['status']];
     }
 
+    public function getExpressStatusTextAttr($value, $data)
+    {
+        return $this->getExpressStatusList()[$data['express_status']];
+    }
+
+    public function getEvaluateStatusTextAttr($value, $data)
+    {
+        return $this->getEvaluateStatusList()[$data['evaluate_status']];
+    }
+
     public function getStatusList()
     {
         return [
-            '未付款',
-            '已付款',
-            '已发货',
-            '交易完成',
-            '交易关闭',
+            0 => '未付款',
+            1 => '已付款',
+            2 => '交易完成',
+            9 => '交易关闭',
+        ];
+    }
+
+    public function getExpressStatusList()
+    {
+        return [
+            0 => '待发货',
+            1 => '已发货',
+            2 => '已收货',
+            9 => '物流异常',
+        ];
+    }
+
+    public function getEvaluateStatusList()
+    {
+        return [
+            0 => '待评价',
+            1 => '已评价',
         ];
     }
 

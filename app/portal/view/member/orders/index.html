@@ -24,7 +24,7 @@
                                 <td>宝贝</td>
                                 <td width="100">单价</td>
                                 <td width="100">数量</td>
-                                <td width="100">实付款</td>
+                                <td width="120">实付款</td>
                                 <td width="100">交易状态</td>
                                 <td width="120">交易操作</td>
                             </tr>
@@ -42,7 +42,7 @@
                                        :hide-on-single-page="true"
                         ></el-pagination>
                     </div>
-                    <div class="border border-light-subtle bg-secondary-subtle mb-2 shadow-sm order-list" v-for="(item, index) in tableData">
+                    <div class="border border-light-subtle bg-secondary-subtle mb-3 shadow-sm order-list" v-for="(item, index) in tableData">
                         <div class="row align-items-center" style="font-size: 13px;">
                             <div class="col">
                                 <div class=" p-2"><span class="me-3">交易时间：{{ item.create_time }}</span> 订单号：{{ item.order_no }}</div>
@@ -62,13 +62,17 @@
                                                             <div class="row g-0">
                                                                 <div class="col-md-3 col-lg-2">
                                                                     <div style="max-width: 120px;">
-                                                                        <img :src="orderItem.img" class="img-fluid rounded-start"
-                                                                             alt="">
+                                                                        <a :href="'/detail?id=' + orderItem.goods_id + '&specs=' + orderItem.specs_name.join(',')">
+                                                                            <img :src="orderItem.img" class="img-fluid rounded-start"
+                                                                                 alt="">
+                                                                        </a>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col-md-9 col-lg-10">
                                                                     <div class="card-body py-md-0">
-                                                                        <p class="card-title">{{ orderItem.title }}</p>
+                                                                        <p class="card-title">
+                                                                            <a :href="'/detail?id=' + orderItem.goods_id + '&specs=' + orderItem.specs_name.join(',')">{{ orderItem.title }}</a>
+                                                                        </p>
                                                                         <p class="card-text text-muted">
                                                                         <span class="me-2" v-for="(attrItem, attrIndex) in orderItem.goods.attribute_list">
                                                                             {{ attrIndex }}： <template v-for="(aItem, aIndex) in attrItem">{{ orderItem.specs_name.includes(aItem) ? aItem : '' }}</template>
@@ -85,15 +89,17 @@
                                             </table>
                                         </div>
                                     </td>
-                                    <td width="100">
-                                        <span class="fw-bold">{{ item.integral }}</span>
+                                    <td width="120">
+                                        <div class="fw-bold">{{ item.integral }}</div>
+                                        <div class="text-muted" style="font-size: 13px;">(含运费：{{ item.postage }})</div>
                                     </td>
                                     <td width="100">
-                                        {{ item.status_text }}
+                                        {{ item.status === 1 ? item.express_status_text : item.status_text }}
                                     </td>
                                     <td width="120" class="border-end-0">
                                         <div class="d-flex justify-content-center">
-                                            <a href="javascript:;" @click="delOrder(item.id)">删除</a>
+                                            <a href="javascript:;" @click="delOrder(item.id)" v-if="item.status === 2">删除</a>
+                                            <a href="javascript:;" @click="delOrder(item.id)" v-if="item.status === 2 && item.evaluate_status === 0">评价</a>
                                         </div>
                                     </td>
                                 </tr>
@@ -143,6 +149,7 @@
                     params: {
                         page: this.currentPage,
                         limit: this.pageSize,
+                        type: this.activeName,
                     }
                 }).then(res => {
                     if (res.data.code === 1) {
@@ -161,7 +168,7 @@
                 console.log(id)
             },
             handleClick(tab, event) {
-                console.log(tab, this.activeName);
+                this.getOrderList()
             }
         }
     })

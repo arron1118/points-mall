@@ -27,7 +27,7 @@ define(["jquery", "easy-admin"], function ($, ea) {
                     {field: 'orderItems[0].quantity', minWidth: 50, title: '数量', search: false,},
                     {field: 'integral', minWidth: 50, title: '积分', search: false,},
                     {field: 'postage', minWidth: 50, title: '运费', search: false,},
-                    {field: 'status', title: '状态', width: 85, selectList: {0: '未付款', 1: '已付款', 2: '已发货', 3: '交易完成', 4: '交易关闭'}},
+                    {field: 'status', title: '状态', width: 85, selectList: {0: '未付款', 1: '已付款', 2: '交易完成', 4: '交易关闭'}},
                     {field: 'create_time', minWidth: 80, title: '创建时间', search: false,},
                 ]],
             });
